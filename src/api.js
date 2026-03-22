@@ -1,9 +1,4 @@
-const BASE_URL = "http://localhost:8000/api/v1"; 
-/* вот здесь когда будешь локально эндпоинты связывать прокинь вот этот url: 
-http://localhost:8000/api/v1
-А тот который здесь убери, я его чисто ради деплоя воткнул. 
-А кста я эндпоинты прокинул в login и register, вроде все норм работает
-*/
+const BASE_URL = "http://localhost:8000/api/v1";
 
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("token");
@@ -23,10 +18,9 @@ async function request(endpoint, options = {}) {
 
   if (!res.ok) {
     const message =
-      data?.detail ||
-      (Array.isArray(data?.detail)
+      Array.isArray(data?.detail)
         ? data.detail.map((e) => e.msg).join(", ")
-        : "Неизвестная ошибка");
+        : data?.detail || "Неизвестная ошибка";
     throw new Error(message);
   }
 
@@ -45,4 +39,39 @@ export const authApi = {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
+};
+
+export const userApi = {
+  getMe: () => request("/users/me"),
+
+  updateAbout: (data) =>
+    request("/users/me/about", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  updateAcademic: (data) =>
+    request("/users/me/academic", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
+  updateExtracurriculars: (data) =>
+    request("/users/me/extracurriculars", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+};
+
+export const universitiesApi = {
+  getAll: (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.country) params.append("country", filters.country);
+    if (filters.difficulty) params.append("difficulty", filters.difficulty);
+    if (filters.minGpa) params.append("min_gpa", filters.minGpa);
+    const query = params.toString();
+    return request(`/universities${query ? "?" + query : ""}`);
+  },
+
+  getCountries: () => request("/universities/countries"),
 };

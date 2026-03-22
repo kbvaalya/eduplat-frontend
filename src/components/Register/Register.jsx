@@ -40,7 +40,7 @@ function Register({ onNavigate }) {
     try {
       const data = await authApi.register(formData.email, formData.password, formData.rpassword);
       localStorage.setItem("token", data.access_token);
-      onNavigate("home");
+      onNavigate("description"); // ← стало
     } catch (err) {
       setErrors({ server: err.message });
     } finally {

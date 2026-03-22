@@ -1,5 +1,16 @@
 import { useState } from "react";
 import "./description.css";
+import { userApi } from "../../../api.js";
+
+
+const categoryMap = {
+  "Волонтерство": "volunteering",
+  "Лидерский опыт": "leadership",
+  "Клуб": "club",
+  "Исследование": "research",
+  "Олимпиада": "olympiad",
+  "Спорт": "sports",
+};
 
 const steps = [
   {
@@ -36,10 +47,12 @@ const steps = [
   },
 ];
 
-export default function Description() {
+export default function Description({ onNavigate }) {
   const [current, setCurrent] = useState(0);
   const [values, setValues] = useState({});
   const [showErrors, setShowErrors] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
   const isDone = current >= steps.length;
 
   const handleChange = (label, value) => {
@@ -48,11 +61,47 @@ export default function Description() {
 
   const currentFields = !isDone ? steps[current].fields : [];
 
-  // ✅ Обновлённая валидация с поддержкой multicheck
   const allFilled = currentFields.every((f) => {
     if (f.type === "multicheck") return (values[f.label] || []).length > 0;
     return values[f.label]?.toString().trim();
   });
+
+  const submitToBackend = async () => {
+    setLoading(true);
+    setServerError("");
+    try {
+      // 1. Основная инфо
+      await userApi.updateAbout({
+        name: values["Имя"],
+        email: values["Эл почта"],
+        school: values["Место обучения"],
+        grade: values["Класс"],
+      });
+
+      // 2. Академическая инфо
+      await userApi.updateAcademic({
+        gpa: parseFloat(values["GPA"]) || null,
+        sat: parseInt(values["Результат SAT"]) || null,
+        ielts: parseFloat(values["Результат IELTS"]) || null,
+        toefl: parseInt(values["Результат TOEFL"]) || null,
+      });
+
+      // 3. Внеучебные активности
+      const selectedCategories = (values["Категория (можно выбрать несколько)"] || [])
+        .map((c) => categoryMap[c])
+        .filter(Boolean);
+
+      await userApi.updateExtracurriculars({
+        categories: selectedCategories,
+        years_active: values["Годы деятельности"] || "",
+      });
+
+      onNavigate("home");
+    } catch (err) {
+      setServerError(err.message);
+      setLoading(false);
+    }
+  };
 
   const handleNext = () => {
     if (!allFilled) {
@@ -60,13 +109,12 @@ export default function Description() {
       return;
     }
     setShowErrors(false);
-    setCurrent((prev) => prev + 1);
-  };
 
-  const handleReset = () => {
-    setCurrent(0);
-    setValues({});
-    setShowErrors(false);
+    if (current === steps.length - 1) {
+      submitToBackend();
+    } else {
+      setCurrent((prev) => prev + 1);
+    }
   };
 
   return (
@@ -88,14 +136,20 @@ export default function Description() {
             <div className="success-sub">
               Теперь мы рассчитаем твою вероятность поступления
             </div>
-            <button className="btn" onClick={handleReset}>
-              Начать заново
+            <button className="btn" onClick={() => onNavigate("home")}>
+              Начать
             </button>
           </div>
         ) : (
           <>
             <div className="step-title">{steps[current].title}</div>
             <div className="step-sub">{steps[current].subtitle}</div>
+
+            {serverError && (
+              <div style={{ color: "red", fontSize: 13, marginBottom: 12 }}>
+                {serverError}
+              </div>
+            )}
 
             {steps[current].fields.map((field, index) => {
               const isEmpty = showErrors && !(
@@ -108,7 +162,6 @@ export default function Description() {
                 <div className="field-wrap" key={`${field.label}-${index}`}>
                   <div className="field-label">{field.label}</div>
 
-                  {/* ✅ multicheck */}
                   {field.type === "multicheck" ? (
                     <div className="multicheck-group">
                       {field.options.map((option) => {
@@ -138,9 +191,7 @@ export default function Description() {
                         <button
                           key={option}
                           type="button"
-                          className={`choice-btn ${
-                            values[field.label] === option ? "choice-btn--active" : ""
-                          }`}
+                          className={`choice-btn ${values[field.label] === option ? "choice-btn--active" : ""}`}
                           onClick={() => handleChange(field.label, option)}
                         >
                           {option}
@@ -164,15 +215,15 @@ export default function Description() {
             })}
 
             <button
-              className={`btn ${!allFilled ? "btn-disabled" : ""}`}
+              className={`btn ${!allFilled || loading ? "btn-disabled" : ""}`}
               onClick={handleNext}
+              disabled={loading}
             >
-              {current === steps.length - 1 ? "Завершить" : "Продолжить"}
+              {loading ? "Сохранение..." : current === steps.length - 1 ? "Завершить" : "Продолжить"}
             </button>
 
             <div className="note">
-              Не беспокойтесь! Вы можете поменять свою информацию позже в
-              настройках профиля
+              Не беспокойтесь! Вы можете поменять свою информацию позже в настройках профиля
             </div>
           </>
         )}

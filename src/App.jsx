@@ -5,6 +5,8 @@ import WelcomPage from './components/WelcomePage/WelcomPage.jsx';
 import Register from './components/Register/Register.jsx';
 import LogIn from './components/LogIn/LogIn.jsx';
 import Home from './components/Home/Home.jsx';
+import Description from './components/Register/Description/description.jsx';
+import Profile from './components/Profile/Profile.jsx';
 
 function App() {
   const [page, setPage] = useState("welcome");
@@ -16,10 +18,12 @@ function App() {
 
   return (
     <div>
-      {page === "welcome"  && <WelcomPage onNavigate={handleNavigate} />}
-      {page === "register" && <Register  onNavigate={handleNavigate} />}
-      {page === "login"    && <LogIn     onNavigate={handleNavigate} />}
-      {page === "home"     && <Home />}
+      {page === "welcome"     && <WelcomPage   onNavigate={handleNavigate} />}
+      {page === "register"    && <Register     onNavigate={handleNavigate} />}
+      {page === "login"       && <LogIn        onNavigate={handleNavigate} />}
+      {page === "description" && <Description  onNavigate={handleNavigate} />}
+      {page === "home"        && <Home         onNavigate={handleNavigate} />}
+      {page === "profile" && <Profile onNavigate={handleNavigate} />}
     </div>
   );
 }
