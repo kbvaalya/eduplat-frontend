@@ -75,3 +75,13 @@ export const universitiesApi = {
 
   getCountries: () => request("/universities/countries"),
 };
+export const opportunitiesApi = {
+  getAll: (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.type) params.append("type", filters.type);
+    const query = params.toString();
+    return request(`/opportunities${query ? "?" + query : ""}`);
+  },
+
+  getById: (id) => request(`/opportunities/${id}`),
+};

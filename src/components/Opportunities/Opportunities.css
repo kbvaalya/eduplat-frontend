@@ -1,0 +1,258 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f5f5f5;
+}
+
+.opp-root {
+  width: 100vw;
+  min-height: 100dvh;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
+}
+
+/* Header */
+.opp-header {
+  background: white;
+  padding: 14px 20px 10px;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.opp-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+}
+
+.opp-logo-arrow {
+  color: #1E47F7;
+}
+
+/* Title */
+.opp-title-row {
+  background: white;
+  padding: 16px 20px 12px;
+}
+
+.opp-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+}
+
+/* Categories */
+.opp-cats {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.opp-cats::-webkit-scrollbar {
+  display: none;
+}
+
+.opp-cat-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1.5px solid #e0e0e0;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.opp-cat-btn--active {
+  background: #1E47F7;
+  border-color: #1E47F7;
+  color: white;
+}
+
+/* List */
+.opp-list {
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opp-loading,
+.opp-empty {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 15px;
+  color: #888;
+}
+
+/* Event card */
+.event-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.event-card-inner {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Image */
+.event-img-wrap {
+  width: 140px;
+  min-width: 140px;
+  height: 100%;
+  min-height: 180px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.event-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1E47F7 0%, #6091F8 100%);
+}
+
+/* Content */
+.event-content {
+  flex: 1;
+  padding: 12px 12px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.event-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.event-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.event-save-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.event-desc {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.event-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.event-date-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #888;
+}
+
+.event-more-btn {
+  width: 100%;
+  background: #1E47F7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.event-more-btn:hover {
+  background: #1535c5;
+}
+
+/* Toast */
+.opp-toast {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  z-index: 300;
+  white-space: nowrap;
+}
+
+.opp-toast-check {
+  color: #1E47F7;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 320px) {
+  .opp-title { font-size: 20px; }
+  .event-img-wrap { width: 110px; min-width: 110px; }
+  .event-title { font-size: 13px; }
+  .event-desc { font-size: 11px; }
+  .opp-list { padding: 10px 12px; }
+}
+
+@media (min-width: 414px) {
+  .opp-title { font-size: 26px; }
+  .event-img-wrap { width: 155px; min-width: 155px; }
+  .event-title { font-size: 16px; }
+  .event-more-btn { padding: 11px; font-size: 14px; }
+}

@@ -7,6 +7,7 @@ import LogIn from './components/LogIn/LogIn.jsx';
 import Home from './components/Home/Home.jsx';
 import Description from './components/Register/Description/description.jsx';
 import Profile from './components/Profile/Profile.jsx';
+import Opportunities from './components/Opportunities/Opportunities.jsx';
 
 function App() {
   const [page, setPage] = useState("welcome");
@@ -24,6 +25,7 @@ function App() {
       {page === "description" && <Description  onNavigate={handleNavigate} />}
       {page === "home"        && <Home         onNavigate={handleNavigate} />}
       {page === "profile" && <Profile onNavigate={handleNavigate} />}
+      {page === "opportunities" && <Opportunities onNavigate={handleNavigate} />}
     </div>
   );
 }

@@ -119,10 +119,10 @@ export default function Home({ onNavigate }) {
     return DIFFICULTY_COLORS[key] || { bg: "#f5f5f5", text: "#666", border: "#ddd" };
   };
 
-  const handleNav = (key) => {
-    setActivePage(key);
-    if (onNavigate && key !== "home") onNavigate(key);
-  };
+const handleNav = (key) => {
+  setActivePage(key);
+  if (onNavigate) onNavigate(key);  // ← просто передаём всё в App
+};
 
   const clearFilters = () => {
     setFilterCountry("");
