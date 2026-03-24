@@ -45,22 +45,26 @@ export const userApi = {
   getMe: () => request("/users/me"),
 
   updateAbout: (data) =>
-    request("/users/me/about", {
-      method: "PUT",
+    request("/profile/about", {
+      method: "POST",
       body: JSON.stringify(data),
     }),
 
   updateAcademic: (data) =>
-    request("/users/me/academic", {
-      method: "PUT",
+    request("/profile/academic", {
+      method: "POST",
       body: JSON.stringify(data),
     }),
 
   updateExtracurriculars: (data) =>
-    request("/users/me/extracurriculars", {
-      method: "PUT",
+    request("/profile/extracurricular", {
+      method: "POST",
       body: JSON.stringify(data),
     }),
+    
+  getAbout: () => request("/profile/about"),
+  getAcademic: () => request("/profile/academic"),
+  getExtracurriculars: () => request("/profile/extracurricular"),
 };
 
 export const universitiesApi = {

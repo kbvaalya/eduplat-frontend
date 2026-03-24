@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Profile.css";
-import { userApi } from "../../../api.js";
+import { userApi } from "../../api.js";
 
 export default function Profile({ onNavigate }) {
   const [user, setUser] = useState(null);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Opportunities.css";
-import { opportunitiesApi } from "../../../api.js";
+import { opportunitiesApi } from "../../api.js";
 
 const CATEGORIES = [
   { key: "", label: "Все" },
