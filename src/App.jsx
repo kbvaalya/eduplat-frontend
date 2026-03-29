@@ -8,6 +8,7 @@ import Home from './components/Home/Home.jsx';
 import Description from './components/Register/Description/description.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Opportunities from './components/Opportunities/Opportunities.jsx';
+import EssayCheck from './components/EssayCheck/EssayCheck.jsx';
 
 function App() {
   const [page, setPage] = useState("welcome");
@@ -19,13 +20,14 @@ function App() {
 
   return (
     <div>
-      {page === "welcome"     && <WelcomPage   onNavigate={handleNavigate} />}
-      {page === "register"    && <Register     onNavigate={handleNavigate} />}
-      {page === "login"       && <LogIn        onNavigate={handleNavigate} />}
-      {page === "description" && <Description  onNavigate={handleNavigate} />}
-      {page === "home"        && <Home         onNavigate={handleNavigate} />}
-      {page === "profile" && <Profile onNavigate={handleNavigate} />}
+      {page === "welcome"       && <WelcomPage    onNavigate={handleNavigate} />}
+      {page === "register"      && <Register      onNavigate={handleNavigate} />}
+      {page === "login"         && <LogIn         onNavigate={handleNavigate} />}
+      {page === "description"   && <Description   onNavigate={handleNavigate} />}
+      {page === "home"          && <Home          onNavigate={handleNavigate} />}
+      {page === "profile"       && <Profile       onNavigate={handleNavigate} />}
       {page === "opportunities" && <Opportunities onNavigate={handleNavigate} />}
+      {page === "essay"         && <EssayCheck    onNavigate={handleNavigate} />}
     </div>
   );
 }
