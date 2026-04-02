@@ -1,0 +1,35 @@
+
+
+.App{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+.text{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+.but{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.button1 {
+  width: 358px;
+  height: 56px;
+  background-color: #1E47F7;
+  border-radius: 20px;
+}
+.button2{
+  width: 358px;
+  height: 56px;
+  background-color: white;
+  border-color: black;
+  border-radius: 20px;
+}
