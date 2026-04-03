@@ -53,7 +53,7 @@ function Register({ onNavigate }) {
       <div className='bigC'>
         <img src={back} alt='' className='img1' />
       </div>
-      <button className='back-btn' onClick={() => onNavigate("back")}>‹ Назад</button>
+      <button className='back-btn1' onClick={() => onNavigate("back")}>‹ Назад</button>
       <div className='containerRegister'>
         <div className='text1'>
           <h1>Создайте свой аккаунт</h1>

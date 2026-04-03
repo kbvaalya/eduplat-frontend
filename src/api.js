@@ -27,7 +27,6 @@ async function request(endpoint, options = {}) {
   return data;
 }
 
-// ─── Auth ───────────────────────────────────────────
 export const authApi = {
   register: (email, password, confirm_password) =>
     request("/auth/register", {
@@ -42,7 +41,6 @@ export const authApi = {
     }),
 };
 
-// ─── Users ──────────────────────────────────────────
 export const userApi = {
   getMe: () => request("/users/me"),
   deleteMe: () => request("/users/me", { method: "DELETE" }),
@@ -71,7 +69,6 @@ export const userApi = {
     request(`/profile/extracurricular/${id}`, { method: "DELETE" }),
 };
 
-// ─── Universities ────────────────────────────────────
 export const universitiesApi = {
   getAll: (filters = {}) => {
     const params = new URLSearchParams();
