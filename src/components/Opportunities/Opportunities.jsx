@@ -59,17 +59,33 @@ export default function Opportunities({ onNavigate }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("");
+  const [search, setSearch] = useState("");
   const [savedIds, setSavedIds] = useState([]);
-  const [toast, setToast] = useState(false);
+  const [toast, setToast] = useState("");
 
   useEffect(() => {
-    loadEvents();
-  }, [activeCategory]);
+    loadSaved();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => loadEvents(), 300);
+    return () => clearTimeout(timer);
+  }, [activeCategory, search]);
+
+  const loadSaved = async () => {
+    try {
+      const data = await opportunitiesApi.getSaved();
+      setSavedIds((Array.isArray(data) ? data : []).map(e => e.id));
+    } catch {}
+  };
 
   const loadEvents = async () => {
     setLoading(true);
     try {
-      const data = await opportunitiesApi.getAll(activeCategory ? { type: activeCategory } : {});
+      const filters = {};
+      if (activeCategory) filters.type = activeCategory;
+      if (search) filters.search = search;
+      const data = await opportunitiesApi.getAll(filters);
       setEvents(Array.isArray(data) ? data : []);
     } catch {
       setEvents([]);
@@ -78,34 +94,34 @@ export default function Opportunities({ onNavigate }) {
     }
   };
 
-  const toggleSave = (id) => {
-    setSavedIds((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((i) => i !== id);
+  const toggleSave = async (event) => {
+    const isSaved = savedIds.includes(event.id);
+    try {
+      if (isSaved) {
+        await opportunitiesApi.unsave(event.id);
+        setSavedIds(prev => prev.filter(id => id !== event.id));
+        setToast("Убрано из сохранённых");
+      } else {
+        await opportunitiesApi.save(event.id);
+        setSavedIds(prev => [...prev, event.id]);
+        setToast("Сохранено в профиле ✓");
       }
-      showToast();
-      return [...prev, id];
-    });
+      setTimeout(() => setToast(""), 2500);
+    } catch (err) {
+      setToast("Ошибка: " + err.message);
+      setTimeout(() => setToast(""), 2500);
+    }
   };
 
-  const showToast = () => {
-    setToast(true);
-    setTimeout(() => setToast(false), 2500);
-  };
-
-  const handleNav = (key) => {
-    if (onNavigate) onNavigate(key);
-  };
+  const handleNav = (key) => { if (onNavigate) onNavigate(key); };
 
   return (
     <div className="opp-root">
-      {/* Header */}
       <div className="opp-header">
         <div className="opp-logo"><span className="opp-logo-arrow">↗</span>Eduplat</div>
       </div>
 
       <div className="opp-page-wrap">
-        {/* Sidebar nav (desktop) */}
         <aside className="opp-sidebar">
           <div className="opp-sidebar-logo"><span className="opp-logo-arrow">↗</span>Eduplat</div>
           {NAV_ITEMS.map((item) => (
@@ -120,14 +136,25 @@ export default function Opportunities({ onNavigate }) {
           ))}
         </aside>
 
-        {/* Main content */}
         <main className="opp-main">
-          {/* Title */}
           <div className="opp-title-row">
             <h1 className="opp-title">Возможности</h1>
           </div>
 
-          {/* Category filter */}
+          {/* Search */}
+          <div className="opp-search-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2"
+              style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)" }}>
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              className="opp-search"
+              placeholder="Поиск..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
           <div className="opp-cats">
             {CATEGORIES.map((cat) => (
               <button
@@ -140,7 +167,6 @@ export default function Opportunities({ onNavigate }) {
             ))}
           </div>
 
-          {/* List */}
           <div className="opp-list">
             {loading ? (
               <div className="opp-loading">Загрузка...</div>
@@ -152,7 +178,7 @@ export default function Opportunities({ onNavigate }) {
                   key={event.id}
                   event={event}
                   saved={savedIds.includes(event.id)}
-                  onSave={() => toggleSave(event.id)}
+                  onSave={() => toggleSave(event)}
                 />
               ))
             )}
@@ -160,14 +186,12 @@ export default function Opportunities({ onNavigate }) {
         </main>
       </div>
 
-      {/* Toast */}
       {toast && (
         <div className="opp-toast">
-          <span className="opp-toast-check">✓</span> Сохранено в профиле
+          <span className="opp-toast-check">✓</span> {toast}
         </div>
       )}
 
-      {/* Bottom nav (mobile only) */}
       <div className="bottom-nav">
         {NAV_ITEMS.map((item) => (
           <button
@@ -189,20 +213,15 @@ function EventCard({ event, saved, onSave }) {
     <div className="event-card">
       <div className="event-card-inner">
         <div className="event-img-wrap">
-          {event.image_url ? (
-            <img src={event.image_url} alt={event.title} className="event-img" />
-          ) : (
-            <div className="event-img-placeholder" />
-          )}
+          {event.image_url
+            ? <img src={event.image_url} alt={event.title} className="event-img" />
+            : <div className="event-img-placeholder" />
+          }
         </div>
-
         <div className="event-content">
           <div className="event-top">
             <div className="event-title">{event.title}</div>
-            <button
-              className={`event-save-btn ${saved ? "event-save-btn--saved" : ""}`}
-              onClick={onSave}
-            >
+            <button className="event-save-btn" onClick={onSave}>
               {saved ? (
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#1E47F7" stroke="#1E47F7" strokeWidth="2">
                   <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
@@ -214,28 +233,23 @@ function EventCard({ event, saved, onSave }) {
               )}
             </button>
           </div>
-
           <div className="event-desc">{event.short_description}</div>
-
           <div className="event-dates">
             <span className="event-date-item">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/>
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
                 <line x1="3" y1="10" x2="21" y2="10"/>
               </svg>
               {event.event_date}
             </span>
             <span className="event-date-item">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
               </svg>
               {event.deadline}
             </span>
           </div>
-
           <button className="event-more-btn">Подробнее</button>
         </div>
       </div>

@@ -26,15 +26,11 @@ const NAV_ITEMS = [
   },
   {
     key: "essay",
-    label: "Проверка эссе",
+    label: "AI чат",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/>
-        <polyline points="10 9 9 9 8 9"/>
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
       </svg>
     ),
   },
@@ -51,42 +47,39 @@ const NAV_ITEMS = [
   },
 ];
 
-const DIFFICULTY_LABELS = {
-  "Легко": "easy",
-  "Среднее": "medium",
-  "Сложно": "hard",
-};
-
-const DIFFICULTY_COLORS = {
-  "Легко": { bg: "#e8f5e9", text: "#2e7d32", border: "#a5d6a7" },
-  "Среднее": { bg: "#fff8e1", text: "#f57f17", border: "#ffe082" },
+const LABEL_COLORS = {
   "Сложно": { bg: "#fce4ec", text: "#c62828", border: "#ef9a9a" },
-  "yellow": { bg: "#fff8e1", text: "#f57f17", border: "#ffe082" },
-  "green": { bg: "#e8f5e9", text: "#2e7d32", border: "#a5d6a7" },
-  "red": { bg: "#fce4ec", text: "#c62828", border: "#ef9a9a" },
+  "Средне": { bg: "#fff8e1", text: "#f57f17", border: "#ffe082" },
+  "Реально": { bg: "#e8f5e9", text: "#2e7d32", border: "#a5d6a7" },
+  "hard":   { bg: "#fce4ec", text: "#c62828", border: "#ef9a9a" },
+  "medium": { bg: "#fff8e1", text: "#f57f17", border: "#ffe082" },
+  "easy":   { bg: "#e8f5e9", text: "#2e7d32", border: "#a5d6a7" },
 };
 
 export default function Home({ onNavigate }) {
-  const [activePage, setActivePage] = useState("home");
   const [universities, setUniversities] = useState([]);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [savedIds, setSavedIds] = useState([]);
+  const [toast, setToast] = useState("");
 
+  const [search, setSearch] = useState("");
   const [filterCountry, setFilterCountry] = useState("");
-  const [filterDifficulty, setFilterDifficulty] = useState("");
-  const [filterGpa, setFilterGpa] = useState("");
-
-  const [openFilter, setOpenFilter] = useState(null); // "country" | "difficulty" | "gpa"
+  const [filterLabel, setFilterLabel] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [openFilter, setOpenFilter] = useState(null);
 
   useEffect(() => {
     loadCountries();
     loadUniversities();
+    loadSaved();
   }, []);
 
   useEffect(() => {
-    loadUniversities();
-  }, [filterCountry, filterDifficulty, filterGpa]);
+    const timer = setTimeout(() => loadUniversities(), 300);
+    return () => clearTimeout(timer);
+  }, [search, filterCountry, filterLabel, sortBy]);
 
   const loadCountries = async () => {
     try {
@@ -97,14 +90,22 @@ export default function Home({ onNavigate }) {
     }
   };
 
+  const loadSaved = async () => {
+    try {
+      const data = await universitiesApi.getSaved();
+      setSavedIds((Array.isArray(data) ? data : []).map(u => u.id));
+    } catch {}
+  };
+
   const loadUniversities = async () => {
     setLoading(true);
     setError("");
     try {
       const filters = {};
       if (filterCountry) filters.country = filterCountry;
-      if (filterDifficulty) filters.difficulty = DIFFICULTY_LABELS[filterDifficulty] || filterDifficulty;
-      if (filterGpa) filters.minGpa = filterGpa;
+      if (filterLabel)   filters.label = filterLabel;
+      if (sortBy)        filters.sort_by = sortBy;
+      if (search)        filters.search = search;
       const data = await universitiesApi.getAll(filters);
       setUniversities(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -114,43 +115,51 @@ export default function Home({ onNavigate }) {
     }
   };
 
-  const getDifficultyStyle = (label, color) => {
-    const key = label || color;
-    return DIFFICULTY_COLORS[key] || { bg: "#f5f5f5", text: "#666", border: "#ddd" };
+  const toggleSave = async (uni) => {
+    const isSaved = savedIds.includes(uni.id);
+    try {
+      if (isSaved) {
+        await universitiesApi.unsave(uni.id);
+        setSavedIds(prev => prev.filter(id => id !== uni.id));
+        showToast("Убрано с доски");
+      } else {
+        await universitiesApi.save(uni.id);
+        setSavedIds(prev => [...prev, uni.id]);
+        showToast("Добавлено на доску ✓");
+      }
+    } catch (err) {
+      showToast("Ошибка: " + err.message);
+    }
   };
 
-const handleNav = (key) => {
-  setActivePage(key);
-  if (onNavigate) onNavigate(key);  // ← просто передаём всё в App
-};
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2500);
+  };
+
+  const getLabelStyle = (label) =>
+    LABEL_COLORS[label] || { bg: "#f5f5f5", text: "#666", border: "#ddd" };
 
   const clearFilters = () => {
     setFilterCountry("");
-    setFilterDifficulty("");
-    setFilterGpa("");
+    setFilterLabel("");
+    setSortBy("");
     setOpenFilter(null);
   };
 
-  const hasFilters = filterCountry || filterDifficulty || filterGpa;
+  const hasFilters = filterCountry || filterLabel || sortBy;
+
+  const handleNav = (key) => { if (onNavigate) onNavigate(key); };
 
   return (
     <div className="home-root">
-      {/* Header */}
       <div className="home-header">
         <div className="home-logo"><span className="home-logo-arrow">↗</span>Eduplat</div>
       </div>
 
-      {/* Page title */}
       <div className="home-title-row">
         <h1 className="home-title">Добавить университет</h1>
         <p className="home-subtitle">Ищите и добавляйте университеты в свою доску</p>
-      </div>
-
-      {/* Back btn */}
-      <div className="home-back-row">
-        <button className="home-back-btn" onClick={() => onNavigate && onNavigate("back")}>
-          ‹ Назад
-        </button>
       </div>
 
       {/* Search */}
@@ -160,13 +169,22 @@ const handleNav = (key) => {
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input className="home-search" placeholder="Поиск" />
+        <input
+          className="home-search"
+          placeholder="Поиск по названию..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        {search && (
+          <button className="home-search-clear" onClick={() => setSearch("")}>✕</button>
+        )}
       </div>
 
       {/* Filters */}
       <div className="home-filters-label">Фильтрация по</div>
       <div className="home-filters-row">
-        {/* Country filter */}
+
+        {/* Country */}
         <div className="filter-wrap">
           <button
             className={`filter-btn ${filterCountry ? "filter-btn--active" : ""}`}
@@ -189,22 +207,22 @@ const handleNav = (key) => {
           )}
         </div>
 
-        {/* Difficulty filter */}
+        {/* Label */}
         <div className="filter-wrap">
           <button
-            className={`filter-btn ${filterDifficulty ? "filter-btn--active" : ""}`}
-            onClick={() => setOpenFilter(openFilter === "difficulty" ? null : "difficulty")}
+            className={`filter-btn ${filterLabel ? "filter-btn--active" : ""}`}
+            onClick={() => setOpenFilter(openFilter === "label" ? null : "label")}
           >
-            {filterDifficulty || "Сложности"} ▾
+            {filterLabel || "Сложности"} ▾
           </button>
-          {openFilter === "difficulty" && (
+          {openFilter === "label" && (
             <div className="filter-dropdown">
-              <div className="filter-option" onClick={() => { setFilterDifficulty(""); setOpenFilter(null); }}>
+              <div className="filter-option" onClick={() => { setFilterLabel(""); setOpenFilter(null); }}>
                 Все
               </div>
-              {["Легко", "Среднее", "Сложно"].map((d) => (
+              {["Сложно", "Средне", "Реально"].map((d) => (
                 <div key={d} className="filter-option"
-                  onClick={() => { setFilterDifficulty(d); setOpenFilter(null); }}>
+                  onClick={() => { setFilterLabel(d); setOpenFilter(null); }}>
                   {d}
                 </div>
               ))}
@@ -212,23 +230,28 @@ const handleNav = (key) => {
           )}
         </div>
 
-        {/* GPA filter */}
+        {/* Sort */}
         <div className="filter-wrap">
           <button
-            className={`filter-btn ${filterGpa ? "filter-btn--active" : ""}`}
-            onClick={() => setOpenFilter(openFilter === "gpa" ? null : "gpa")}
+            className={`filter-btn ${sortBy ? "filter-btn--active" : ""}`}
+            onClick={() => setOpenFilter(openFilter === "sort" ? null : "sort")}
           >
-            GPA {filterGpa ? `${filterGpa}+` : ""} ▾
+            {sortBy ? sortBy === "probability" ? "Вероятность" : sortBy === "min_gpa" ? "GPA" : "SAT" : "Сортировка"} ▾
           </button>
-          {openFilter === "gpa" && (
+          {openFilter === "sort" && (
             <div className="filter-dropdown">
-              <div className="filter-option" onClick={() => { setFilterGpa(""); setOpenFilter(null); }}>
-                Любой GPA
+              <div className="filter-option" onClick={() => { setSortBy(""); setOpenFilter(null); }}>
+                По умолчанию
               </div>
-              {["2.0", "2.5", "3.0", "3.5", "3.8"].map((g) => (
-                <div key={g} className="filter-option"
-                  onClick={() => { setFilterGpa(g); setOpenFilter(null); }}>
-                  {g}+
+              {[
+                { key: "probability", label: "По вероятности" },
+                { key: "min_gpa", label: "По GPA" },
+                { key: "min_sat", label: "По SAT" },
+                { key: "ranking", label: "По рейтингу" },
+              ].map((s) => (
+                <div key={s.key} className="filter-option"
+                  onClick={() => { setSortBy(s.key); setOpenFilter(null); }}>
+                  {s.label}
                 </div>
               ))}
             </div>
@@ -236,13 +259,11 @@ const handleNav = (key) => {
         </div>
 
         {hasFilters && (
-          <button className="filter-btn filter-btn--clear" onClick={clearFilters}>
-            ✕
-          </button>
+          <button className="filter-btn filter-btn--clear" onClick={clearFilters}>✕</button>
         )}
       </div>
 
-      {/* University list */}
+      {/* List */}
       <div className="home-list">
         {loading ? (
           <div className="home-loading">Загрузка...</div>
@@ -252,7 +273,8 @@ const handleNav = (key) => {
           <div className="home-empty">Университеты не найдены</div>
         ) : (
           universities.map((uni) => {
-            const diffStyle = getDifficultyStyle(uni.label, uni.color);
+            const labelStyle = getLabelStyle(uni.label);
+            const isSaved = savedIds.includes(uni.id);
             return (
               <div key={uni.id} className="uni-card">
                 <div className="uni-card-top">
@@ -263,9 +285,9 @@ const handleNav = (key) => {
                   <div className="uni-card-right">
                     <span className="uni-prob">{uni.probability}%</span>
                     <span className="uni-badge" style={{
-                      background: diffStyle.bg,
-                      color: diffStyle.text,
-                      border: `1px solid ${diffStyle.border}`,
+                      background: labelStyle.bg,
+                      color: labelStyle.text,
+                      border: `1px solid ${labelStyle.border}`,
                     }}>
                       {uni.label}
                     </span>
@@ -287,22 +309,28 @@ const handleNav = (key) => {
                   </div>
                 </div>
 
-                <button className="uni-add-btn">Добавить</button>
+                <button
+                  className={`uni-add-btn ${isSaved ? "uni-add-btn--saved" : ""}`}
+                  onClick={() => toggleSave(uni)}
+                >
+                  {isSaved ? "✓ На доске" : "Добавить"}
+                </button>
               </div>
             );
           })
         )}
       </div>
 
-      {/* Bottom navigation */}
+      {toast && <div className="home-toast">{toast}</div>}
+
       <div className="bottom-nav">
         {NAV_ITEMS.map((item) => (
           <button
             key={item.key}
-            className={`bottom-nav-item ${activePage === item.key ? "bottom-nav-item--active" : ""}`}
+            className={`bottom-nav-item ${item.key === "home" ? "bottom-nav-item--active" : ""}`}
             onClick={() => handleNav(item.key)}
           >
-            {item.icon(activePage === item.key)}
+            {item.icon(item.key === "home")}
             <span className="bottom-nav-label">{item.label}</span>
           </button>
         ))}

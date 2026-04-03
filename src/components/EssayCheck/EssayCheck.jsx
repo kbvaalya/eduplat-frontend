@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./EssayCheck.css";
-
-const BASE_URL = "http://localhost:8000/api/v1";
+import { essayApi } from "../../api.js";
 
 const NAV_ITEMS = [
   {
@@ -27,15 +26,11 @@ const NAV_ITEMS = [
   },
   {
     key: "essay",
-    label: "Проверка эссе",
+    label: "AI чат",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/>
-        <polyline points="10 9 9 9 8 9"/>
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
       </svg>
     ),
   },
@@ -52,7 +47,6 @@ const NAV_ITEMS = [
   },
 ];
 
-// Gauge colors map to backend color field
 const GAUGE_COLORS = {
   green:  "#4caf50",
   yellow: "#ffa726",
@@ -70,12 +64,9 @@ function ScoreGauge({ score, color }) {
   return (
     <div className="score-gauge-wrap">
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={size/2} cy={size/2} r={r}
-          fill="none" stroke="#f0f0f0" strokeWidth={sw} />
-        <circle cx={size/2} cy={size/2} r={r}
-          fill="none" stroke={strokeColor} strokeWidth={sw}
-          strokeDasharray={`${fill} ${circ - fill}`}
-          strokeLinecap="round" />
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#f0f0f0" strokeWidth={sw} />
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={strokeColor} strokeWidth={sw}
+          strokeDasharray={`${fill} ${circ - fill}`} strokeLinecap="round" />
       </svg>
       <div className="score-center">
         <span className="score-number">{score}</span>
@@ -113,11 +104,7 @@ export default function EssayCheck({ onNavigate }) {
   const charCount = text.length;
   const isReady = charCount >= MIN_CHARS && charCount <= MAX_CHARS;
 
-  const charClass = charCount === 0
-    ? ""
-    : charCount < MIN_CHARS
-    ? "warn"
-    : "ok";
+  const charClass = charCount === 0 ? "" : charCount < MIN_CHARS ? "warn" : "ok";
 
   const handleAnalyze = async () => {
     if (!isReady) return;
@@ -125,27 +112,9 @@ export default function EssayCheck({ onNavigate }) {
     setLoading(true);
     setResult(null);
 
-    const token = localStorage.getItem("token");
-
     try {
-      const res = await fetch(`${BASE_URL}/essay/check`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({ text }),
-      });
-
-      const data = await res.json().catch(() => null);
-
-      if (!res.ok) {
-        const msg = Array.isArray(data?.detail)
-          ? data.detail.map((e) => e.msg).join(", ")
-          : data?.detail || "Ошибка сервера";
-        throw new Error(msg);
-      }
-
+      // Используем новый essayApi из api.js → /motivation-letter/analyze
+      const data = await essayApi.analyze(text);
       setResult(data);
     } catch (err) {
       setError(err.message || "Не удалось подключиться к серверу.");
@@ -160,27 +129,21 @@ export default function EssayCheck({ onNavigate }) {
     setError("");
   };
 
-  const handleNav = (key) => {
-    if (onNavigate) onNavigate(key);
-  };
+  const handleNav = (key) => { if (onNavigate) onNavigate(key); };
 
   return (
     <div className="essay-root">
-
-      {/* Header */}
       <div className="essay-header">
         <div className="essay-logo">
           <span className="essay-logo-arrow">↗</span>Eduplat
         </div>
       </div>
 
-      {/* Title */}
       <div className="essay-title-row">
         <h1 className="essay-title">Проверка эссе 🎓</h1>
         <p className="essay-subtitle">ИИ оценит мотивационное письмо и даст советы</p>
       </div>
 
-      {/* ── INPUT STATE ── */}
       {!result && !loading && (
         <>
           <div className="essay-card">
@@ -195,10 +158,7 @@ export default function EssayCheck({ onNavigate }) {
               placeholder="Я хочу поступить в этот университет, потому что..."
               value={text}
               maxLength={MAX_CHARS}
-              onChange={(e) => {
-                setText(e.target.value);
-                setError("");
-              }}
+              onChange={(e) => { setText(e.target.value); setError(""); }}
             />
             <div className="essay-hint">
               {charCount < MIN_CHARS
@@ -209,13 +169,8 @@ export default function EssayCheck({ onNavigate }) {
 
           {error && <div className="essay-error">{error}</div>}
 
-          <button
-            className="essay-btn"
-            onClick={handleAnalyze}
-            disabled={!isReady}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="white" strokeWidth="2">
+          <button className="essay-btn" onClick={handleAnalyze} disabled={!isReady}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
               <path d="M9 11l3 3L22 4"/>
               <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
             </svg>
@@ -224,7 +179,6 @@ export default function EssayCheck({ onNavigate }) {
         </>
       )}
 
-      {/* ── LOADING STATE ── */}
       {loading && (
         <div className="essay-loading-wrap">
           <div className="essay-spinner" />
@@ -232,56 +186,26 @@ export default function EssayCheck({ onNavigate }) {
         </div>
       )}
 
-      {/* ── RESULT STATE ── */}
       {result && (
         <div className="essay-result">
-
-          {/* Score card */}
           <div className="score-card">
             <ScoreGauge score={result.score} color={result.color} />
             <div className="score-info">
-              <span className={`score-badge ${result.color || "yellow"}`}>
-                {result.label}
-              </span>
-              {result.summary && (
-                <div className="score-summary">{result.summary}</div>
-              )}
+              <span className={`score-badge ${result.color || "yellow"}`}>{result.label}</span>
+              {result.summary && <div className="score-summary">{result.summary}</div>}
             </div>
           </div>
 
-          {/* Strengths */}
-          <ResultSection
-            title="Сильные стороны"
-            items={result.strengths}
-            type="strengths"
-            dotColor="#4caf50"
-          />
+          <ResultSection title="Сильные стороны" items={result.strengths} type="strengths" dotColor="#4caf50" />
+          <ResultSection title="Слабые стороны" items={result.weaknesses} type="weaknesses" dotColor="#ffa726" />
+          <ResultSection title="Советы по улучшению" items={result.suggestions} type="suggestions" dotColor="#1E47F7" />
 
-          {/* Weaknesses */}
-          <ResultSection
-            title="Слабые стороны"
-            items={result.weaknesses}
-            type="weaknesses"
-            dotColor="#ffa726"
-          />
-
-          {/* Suggestions */}
-          <ResultSection
-            title="Советы по улучшению"
-            items={result.suggestions}
-            type="suggestions"
-            dotColor="#1E47F7"
-          />
-
-          {/* Reset */}
           <button className="essay-reset-btn" onClick={handleReset}>
             Проверить другое письмо
           </button>
-
         </div>
       )}
 
-      {/* Bottom navigation */}
       <div className="bottom-nav">
         {NAV_ITEMS.map((item) => (
           <button
