@@ -221,7 +221,7 @@ html, body {
   .containerRegister { height: 82%; gap: 16px; }
   .input { height: 44px; }
   .button { height: 48px; }
-  .back-btn { top: 17%; }
+  .back-btn { top: 15%; }
 }
 
 /* ── По высоте: средний (700–799px) ── */

@@ -189,7 +189,7 @@ html, body {
 
 /* ── По высоте: большой экран (800–899px) ── */
 @media (min-height: 800px) and (max-height: 899px) {
-  .bigC { top: -20%; }
+  .bigC { top: -15%; }
   .img { top: -8%; }
   .App { bottom: 40px; }
 }
