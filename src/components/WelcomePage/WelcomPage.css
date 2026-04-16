@@ -151,7 +151,7 @@ html, body {
 
 /* ── iPhone 14/15, большие Android (414–429px) ── */
 @media (min-width: 414px) and (max-width: 429px) {
-  .bigC { width: 650px; height: 650px; top: -14%; }
+  .bigC { width: 650px; height: 650px; top: -20%; }
   .App { bottom: 40px; }
 }
 

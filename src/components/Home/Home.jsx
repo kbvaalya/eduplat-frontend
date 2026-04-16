@@ -72,8 +72,8 @@ export default function Home({ onNavigate }) {
 
   useEffect(() => {
     loadCountries();
-    loadUniversities();
     loadSaved();
+    loadUniversities();
   }, []);
 
   useEffect(() => {
@@ -144,126 +144,132 @@ export default function Home({ onNavigate }) {
     setFilterCountry("");
     setFilterLabel("");
     setSortBy("");
+    setSearch("");
     setOpenFilter(null);
   };
 
-  const hasFilters = filterCountry || filterLabel || sortBy;
-
+  const hasFilters = filterCountry || filterLabel || sortBy || search;
   const handleNav = (key) => { if (onNavigate) onNavigate(key); };
 
   return (
-    <div className="home-root">
+    <div className="home-root" onClick={() => openFilter && setOpenFilter(null)}>
+      {/* Header */}
       <div className="home-header">
         <div className="home-logo"><span className="home-logo-arrow">↗</span>Eduplat</div>
       </div>
 
+      {/* Title */}
       <div className="home-title-row">
         <h1 className="home-title">Добавить университет</h1>
         <p className="home-subtitle">Ищите и добавляйте университеты в свою доску</p>
       </div>
 
-      {/* Search */}
-      <div className="home-search-wrap">
-        <svg className="home-search-icon" width="16" height="16" viewBox="0 0 24 24"
-          fill="none" stroke="#aaa" strokeWidth="2">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input
-          className="home-search"
-          placeholder="Поиск по названию..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        {search && (
-          <button className="home-search-clear" onClick={() => setSearch("")}>✕</button>
-        )}
+      {/* ── Search + Filters всегда видны ── */}
+      <div className="home-controls">
+
+        {/* Search */}
+        <div className="home-search-wrap">
+          <svg className="home-search-icon" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="#aaa" strokeWidth="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            className="home-search"
+            placeholder="Поиск по названию..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+          />
+          {search && (
+            <button className="home-search-clear" onClick={() => setSearch("")}>✕</button>
+          )}
+        </div>
+
+        {/* Filters row */}
+        <div className="home-filters-row" onClick={(e) => e.stopPropagation()}>
+
+          {/* Country */}
+          <div className="filter-wrap">
+            <button
+              className={`filter-btn ${filterCountry ? "filter-btn--active" : ""}`}
+              onClick={() => setOpenFilter(openFilter === "country" ? null : "country")}
+            >
+              {filterCountry || "Страна"} ▾
+            </button>
+            {openFilter === "country" && (
+              <div className="filter-dropdown">
+                <div className="filter-option" onClick={() => { setFilterCountry(""); setOpenFilter(null); }}>
+                  Все страны
+                </div>
+                {countries.map((c) => (
+                  <div key={c} className="filter-option"
+                    onClick={() => { setFilterCountry(c); setOpenFilter(null); }}>
+                    {c}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Label */}
+          <div className="filter-wrap">
+            <button
+              className={`filter-btn ${filterLabel ? "filter-btn--active" : ""}`}
+              onClick={() => setOpenFilter(openFilter === "label" ? null : "label")}
+            >
+              {filterLabel || "Сложность"} ▾
+            </button>
+            {openFilter === "label" && (
+              <div className="filter-dropdown">
+                <div className="filter-option" onClick={() => { setFilterLabel(""); setOpenFilter(null); }}>
+                  Все
+                </div>
+                {["Сложно", "Средне", "Реально"].map((d) => (
+                  <div key={d} className="filter-option"
+                    onClick={() => { setFilterLabel(d); setOpenFilter(null); }}>
+                    {d}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Sort */}
+          <div className="filter-wrap">
+            <button
+              className={`filter-btn ${sortBy ? "filter-btn--active" : ""}`}
+              onClick={() => setOpenFilter(openFilter === "sort" ? null : "sort")}
+            >
+              {sortBy === "probability" ? "Вероятность" : sortBy === "min_gpa" ? "GPA" : sortBy === "min_sat" ? "SAT" : sortBy === "ranking" ? "Рейтинг" : "Сортировка"} ▾
+            </button>
+            {openFilter === "sort" && (
+              <div className="filter-dropdown">
+                <div className="filter-option" onClick={() => { setSortBy(""); setOpenFilter(null); }}>
+                  По умолчанию
+                </div>
+                {[
+                  { key: "probability", label: "По вероятности" },
+                  { key: "min_gpa", label: "По GPA" },
+                  { key: "min_sat", label: "По SAT" },
+                  { key: "ranking", label: "По рейтингу" },
+                ].map((s) => (
+                  <div key={s.key} className="filter-option"
+                    onClick={() => { setSortBy(s.key); setOpenFilter(null); }}>
+                    {s.label}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {hasFilters && (
+            <button className="filter-btn filter-btn--clear" onClick={clearFilters}>✕ Сброс</button>
+          )}
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className="home-filters-label">Фильтрация по</div>
-      <div className="home-filters-row">
-
-        {/* Country */}
-        <div className="filter-wrap">
-          <button
-            className={`filter-btn ${filterCountry ? "filter-btn--active" : ""}`}
-            onClick={() => setOpenFilter(openFilter === "country" ? null : "country")}
-          >
-            {filterCountry || "Странам"} ▾
-          </button>
-          {openFilter === "country" && (
-            <div className="filter-dropdown">
-              <div className="filter-option" onClick={() => { setFilterCountry(""); setOpenFilter(null); }}>
-                Все страны
-              </div>
-              {countries.map((c) => (
-                <div key={c} className="filter-option"
-                  onClick={() => { setFilterCountry(c); setOpenFilter(null); }}>
-                  {c}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Label */}
-        <div className="filter-wrap">
-          <button
-            className={`filter-btn ${filterLabel ? "filter-btn--active" : ""}`}
-            onClick={() => setOpenFilter(openFilter === "label" ? null : "label")}
-          >
-            {filterLabel || "Сложности"} ▾
-          </button>
-          {openFilter === "label" && (
-            <div className="filter-dropdown">
-              <div className="filter-option" onClick={() => { setFilterLabel(""); setOpenFilter(null); }}>
-                Все
-              </div>
-              {["Сложно", "Средне", "Реально"].map((d) => (
-                <div key={d} className="filter-option"
-                  onClick={() => { setFilterLabel(d); setOpenFilter(null); }}>
-                  {d}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Sort */}
-        <div className="filter-wrap">
-          <button
-            className={`filter-btn ${sortBy ? "filter-btn--active" : ""}`}
-            onClick={() => setOpenFilter(openFilter === "sort" ? null : "sort")}
-          >
-            {sortBy ? sortBy === "probability" ? "Вероятность" : sortBy === "min_gpa" ? "GPA" : "SAT" : "Сортировка"} ▾
-          </button>
-          {openFilter === "sort" && (
-            <div className="filter-dropdown">
-              <div className="filter-option" onClick={() => { setSortBy(""); setOpenFilter(null); }}>
-                По умолчанию
-              </div>
-              {[
-                { key: "probability", label: "По вероятности" },
-                { key: "min_gpa", label: "По GPA" },
-                { key: "min_sat", label: "По SAT" },
-                { key: "ranking", label: "По рейтингу" },
-              ].map((s) => (
-                <div key={s.key} className="filter-option"
-                  onClick={() => { setSortBy(s.key); setOpenFilter(null); }}>
-                  {s.label}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {hasFilters && (
-          <button className="filter-btn filter-btn--clear" onClick={clearFilters}>✕</button>
-        )}
-      </div>
-
-      {/* List */}
+      {/* University list */}
       <div className="home-list">
         {loading ? (
           <div className="home-loading">Загрузка...</div>

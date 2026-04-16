@@ -1,8 +1,4 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 .home-root {
   width: 100vw;
@@ -41,11 +37,19 @@
 .home-title { font-size: 22px; font-weight: 700; color: #111; }
 .home-subtitle { font-size: 13px; color: #888; margin-top: 4px; }
 
-/* Search */
+/* ── Controls (search + filters always together) ── */
+.home-controls {
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 10px 16px 12px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .home-search-wrap {
   position: relative;
-  margin: 12px 16px;
-  flex-shrink: 0;
 }
 
 .home-search-icon {
@@ -53,6 +57,7 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .home-search-clear {
@@ -70,35 +75,30 @@
 
 .home-search {
   width: 100%;
-  height: 44px;
+  height: 42px;
   border-radius: 10px;
   border: 1px solid #e0e0e0;
-  background: white;
+  background: #f9f9f9;
   padding: 0 36px 0 36px;
-  font-size: 15px;
+  font-size: 14px;
   color: #333;
   outline: none;
   font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
 }
 
-.home-search:focus { border-color: #1E47F7; }
-
-/* Filters */
-.home-filters-label {
-  font-size: 13px;
-  color: #444;
-  padding: 0 16px;
-  margin-bottom: 8px;
-  font-weight: 500;
+.home-search:focus {
+  border-color: #1E47F7;
+  background: white;
 }
 
+/* Filters row */
 .home-filters-row {
   display: flex;
   gap: 8px;
-  padding: 0 16px;
   overflow-x: auto;
   scrollbar-width: none;
-  margin-bottom: 12px;
+  align-items: center;
 }
 
 .home-filters-row::-webkit-scrollbar { display: none; }
@@ -106,7 +106,7 @@
 .filter-wrap { position: relative; flex-shrink: 0; }
 
 .filter-btn {
-  padding: 8px 12px;
+  padding: 7px 12px;
   border: 1px solid #ddd;
   border-radius: 20px;
   background: white;
@@ -128,7 +128,7 @@
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   z-index: 100;
   min-width: 160px;
   overflow: hidden;
@@ -145,9 +145,9 @@
 
 .filter-option:hover { background: #f5f7ff; }
 
-/* List */
+/* University list */
 .home-list {
-  padding: 0 16px 12px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -287,9 +287,8 @@
 @media (max-width: 320px) {
   .home-title { font-size: 18px; }
   .uni-name { font-size: 14px; }
-  .home-list { padding: 0 12px 12px; }
-  .home-filters-row { padding: 0 12px; }
-  .home-search-wrap { margin: 10px 12px; }
+  .home-list { padding: 10px 12px; }
+  .home-controls { padding: 10px 12px; }
   .bottom-nav-label { font-size: 9px; }
 }
 
@@ -303,9 +302,7 @@
   .home-root { padding-bottom: 0; }
   .bottom-nav { display: none; }
   .home-title-row { padding: 24px 32px 8px; }
-  .home-search-wrap { margin: 12px 32px; }
-  .home-filters-label { padding: 0 32px; }
-  .home-filters-row { padding: 0 32px; }
+  .home-controls { padding: 12px 32px 14px; }
   .home-list { padding: 16px 32px; gap: 16px; }
   .home-title { font-size: 28px; }
 }
