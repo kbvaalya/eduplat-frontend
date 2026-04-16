@@ -157,7 +157,7 @@ html, body {
 
 /* ── iPhone 14/15 Plus, Pro Max (430px+) ── */
 @media (min-width: 430px) {
-  .bigCm { width: 700px; height: 700px; top: -12%; }
+  .bigCm { width: 600px; height: 600px; top: -55%; }
   .button1, .button2 { width: 390px; }
   .App { bottom: 44px; }
 }
@@ -175,14 +175,14 @@ html, body {
 
 /* ── По высоте: маленький экран (600–699px) ── */
 @media (min-height: 600px) and (max-height: 699px) {
-  .bigCm { top: -45%; }
-  .img { top: -15%; }
+  .bigCm { top: -26%; }
+  .img { top: -20%; }
   .App { bottom: 24px; }
 }
 
 /* ── По высоте: средний экран (700–799px) ── */
 @media (min-height: 700px) and (max-height: 799px) {
-  .bigCm { top: -30%; }
+  .bigCm { top: -20%; }
   .img { top: -12%; }
   .App { bottom: 32px; }
 }
