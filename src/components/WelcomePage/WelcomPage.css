@@ -144,7 +144,7 @@ html, body {
 
 /* ── iPhone 12/13/14 mini, средние Android (390–413px) ── */
 @media (min-width: 390px) and (max-width: 413px) {
-  .bigCm { width: 620px; height: 620px; top: -15%; }
+  .bigCm { width: 620px; height: 620px; top: -20%; }
   .img { top: -3%; }
   .App { bottom: 36px; }
 }
@@ -164,7 +164,7 @@ html, body {
 
 /* ── По высоте: очень маленький экран (< 600px) ── */
 @media (max-height: 599px) {
-  .bigCm { top: -55%; width: 500px; height: 500px; }
+  .bigCm { top: -60%; width: 500px; height: 500px; }
   .img { top: -20%; }
   .text h1 { font-size: 20px; }
   .text p { font-size: 12px; }
@@ -182,7 +182,7 @@ html, body {
 
 /* ── По высоте: средний экран (700–799px) ── */
 @media (min-height: 700px) and (max-height: 799px) {
-  .bigCm { top: -20%; }
+  .bigCm { top: -25%; }
   .img { top: -12%; }
   .App { bottom: 32px; }
 }
