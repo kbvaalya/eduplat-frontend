@@ -201,14 +201,14 @@ html, body {
   .containerLogIn { height: 73%; gap: 20px; }
   .inputLogin { height: 44px; }
   .button { height: 48px; }
-  .back-btn { top: 25%; }
+  .back-btn { top: 23%; }
 }
 
 /* ── По высоте: средний (700–799px) ── */
 @media (min-height: 700px) and (max-height: 799px) {
   .containerLogIn { height: 70%; gap: 24px; }
   .inputLogin { height: 48px; }
-  .back-btn { top: 28%; }
+  .back-btn { top: 26%; }
 }
 
 /* ── По высоте: большой (800px+) ── */

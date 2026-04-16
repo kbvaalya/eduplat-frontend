@@ -175,7 +175,7 @@ html, body {
 
 /* ── По высоте: маленький экран (600–699px) ── */
 @media (min-height: 600px) and (max-height: 699px) {
-  .bigCm { top: -26%; }
+  .bigCm { top: -28%; }
   .img { top: -20%; }
   .App { bottom: 24px; }
 }
