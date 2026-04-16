@@ -23,7 +23,7 @@ html, body {
   flex-direction: column;
 }
 
-.bigC {
+.bigCm {
   width: 700px;
   height: 700px;
   background-color: #6091F8;
@@ -114,7 +114,7 @@ html, body {
 
 /* ── Очень маленькие телефоны (iPhone SE 1st gen, 320px) ── */
 @media (max-width: 320px) {
-  .bigC {
+  .bigCm {
     width: 480px;
     height: 480px;
     top: -25%;
@@ -128,7 +128,7 @@ html, body {
 
 /* ── Маленькие телефоны (320–374px) ── */
 @media (min-width: 321px) and (max-width: 374px) {
-  .bigC { width: 520px; height: 520px; top: -22%; }
+  .bigCm { width: 520px; height: 520px; top: -22%; }
   .img { top: -8%; }
   .text h1 { font-size: 24px; }
   .button1, .button2 { height: 50px; }
@@ -137,34 +137,34 @@ html, body {
 
 /* ── iPhone SE 2/3, стандартные Android (375–389px) ── */
 @media (min-width: 375px) and (max-width: 389px) {
-  .bigC { width: 580px; height: 580px; top: -18%; }
+  .bigCm { width: 580px; height: 580px; top: -18%; }
   .img { top: -5%; }
   .App { bottom: 32px; }
 }
 
 /* ── iPhone 12/13/14 mini, средние Android (390–413px) ── */
 @media (min-width: 390px) and (max-width: 413px) {
-  .bigC { width: 620px; height: 620px; top: -15%; }
+  .bigCm { width: 620px; height: 620px; top: -15%; }
   .img { top: -3%; }
   .App { bottom: 36px; }
 }
 
 /* ── iPhone 14/15, большие Android (414–429px) ── */
 @media (min-width: 414px) and (max-width: 429px) {
-  .bigC { width: 600px; height: 600px; top: -25%; }
+  .bigCm { width: 600px; height: 600px; top: -25%; }
   .App { bottom: 40px; }
 }
 
 /* ── iPhone 14/15 Plus, Pro Max (430px+) ── */
 @media (min-width: 430px) {
-  .bigC { width: 700px; height: 700px; top: -12%; }
+  .bigCm { width: 700px; height: 700px; top: -12%; }
   .button1, .button2 { width: 390px; }
   .App { bottom: 44px; }
 }
 
 /* ── По высоте: очень маленький экран (< 600px) ── */
 @media (max-height: 599px) {
-  .bigC { top: -55%; width: 500px; height: 500px; }
+  .bigCm { top: -55%; width: 500px; height: 500px; }
   .img { top: -20%; }
   .text h1 { font-size: 20px; }
   .text p { font-size: 12px; }
@@ -175,28 +175,28 @@ html, body {
 
 /* ── По высоте: маленький экран (600–699px) ── */
 @media (min-height: 600px) and (max-height: 699px) {
-  .bigC { top: -45%; }
+  .bigCm { top: -45%; }
   .img { top: -15%; }
   .App { bottom: 24px; }
 }
 
 /* ── По высоте: средний экран (700–799px) ── */
 @media (min-height: 700px) and (max-height: 799px) {
-  .bigC { top: -30%; }
+  .bigCm { top: -30%; }
   .img { top: -12%; }
   .App { bottom: 32px; }
 }
 
 /* ── По высоте: большой экран (800–899px) ── */
 @media (min-height: 800px) and (max-height: 899px) {
-  .bigC { top: -15%; }
+  .bigCm { top: -15%; }
   .img { top: -8%; }
   .App { bottom: 40px; }
 }
 
 /* ── По высоте: очень большой экран (900px+) ── */
 @media (min-height: 900px) {
-  .bigC { top: -12%; }
+  .bigCm { top: -12%; }
   .img { top: -2%; }
   .App { bottom: 50px; }
 }

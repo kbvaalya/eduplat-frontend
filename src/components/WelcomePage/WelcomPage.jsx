@@ -6,7 +6,7 @@ function WelcomPage({onNavigate}){
     return(
         <div className='container'>
             <div>
-                <div className='bigC'></div>
+                <div className='bigCm'></div>
                 <img src={imag} alt='' className='img'></img>
                 <div className="App">
                     <div className='text'>
