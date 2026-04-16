@@ -213,7 +213,7 @@ html, body {
   .button { height: 42px; font-size: 14px; }
   .text1 h1 { font-size: 18px; }
   .form { gap: 10px; }
-  .back-btn { top: 14%; }
+  .back-btn { top: 10%; }
 }
 
 /* ── По высоте: маленький (600–699px) ── */
@@ -221,14 +221,14 @@ html, body {
   .containerRegister { height: 82%; gap: 16px; }
   .input { height: 44px; }
   .button { height: 48px; }
-  .back-btn { top: 15%; }
+  .back-btn { top: 9%; }
 }
 
 /* ── По высоте: средний (700–799px) ── */
 @media (min-height: 700px) and (max-height: 799px) {
   .containerRegister { height: 80%; gap: 20px; }
   .input { height: 48px; }
-  .back-btn { top: 19%; }
+  .back-btn { top: 16%; }
 }
 
 /* ── По высоте: большой (800px+) ── */
