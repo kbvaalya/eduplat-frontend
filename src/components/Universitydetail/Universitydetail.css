@@ -1,0 +1,359 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.ud-root {
+  width: 100vw;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+}
+
+/* Header */
+.ud-header {
+  background: white;
+  padding: 14px 20px 10px;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.ud-logo { font-size: 18px; font-weight: 700; color: #111; }
+.ud-logo-arrow { color: #1E47F7; }
+
+.ud-back-row {
+  background: white;
+  padding: 10px 20px 6px;
+  flex-shrink: 0;
+}
+
+.ud-back-btn {
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ud-page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  padding: 0 20px 14px;
+  background: white;
+  flex-shrink: 0;
+}
+
+/* University hero card */
+.ud-hero {
+  background: white;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.ud-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.ud-hero-left { flex: 1; min-width: 0; }
+
+.ud-uni-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+
+.ud-uni-location { font-size: 13px; color: #888; }
+
+.ud-hero-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.ud-prob { font-size: 16px; font-weight: 700; color: #111; }
+
+.ud-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.ud-stats {
+  display: flex;
+  border-top: 1px solid #f5f5f5;
+  padding-top: 12px;
+  margin-bottom: 14px;
+}
+
+.ud-stat { flex: 1; }
+.ud-stat-label { font-size: 11px; color: #aaa; margin-bottom: 2px; }
+.ud-stat-value { font-size: 14px; font-weight: 600; color: #333; }
+
+.ud-official-btn {
+  width: 100%;
+  background: #1E47F7;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ud-official-btn:hover { background: #1535c5; }
+
+/* Tabs */
+.ud-tabs {
+  display: flex;
+  background: white;
+  border-bottom: 1px solid #e8e8e8;
+  flex-shrink: 0;
+  position: sticky;
+  top: 49px;
+  z-index: 40;
+}
+
+.ud-tab {
+  flex: 1;
+  padding: 13px 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.ud-tab--active {
+  color: #1E47F7;
+  border-bottom-color: #1E47F7;
+}
+
+/* Content */
+.ud-content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Section card */
+.ud-section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #f0f0f0;
+}
+
+.ud-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ud-section-icon { font-size: 16px; flex-shrink: 0; }
+
+.ud-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+}
+
+.ud-section-body {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.65;
+}
+
+.ud-section-body p { margin-bottom: 8px; }
+.ud-section-body p:last-child { margin-bottom: 0; }
+
+.ud-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ud-list-item {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+  padding-left: 14px;
+  position: relative;
+}
+
+.ud-list-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #1E47F7;
+  font-weight: 700;
+}
+
+/* Loading / error */
+.ud-loading, .ud-error {
+  text-align: center;
+  padding: 48px 20px;
+  font-size: 15px;
+  color: #888;
+}
+
+.ud-error { color: #dc2626; }
+
+.ud-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid #e8e8e8;
+  border-top-color: #1E47F7;
+  border-radius: 50%;
+  animation: ud-spin 0.75s linear infinite;
+  margin: 0 auto 14px;
+}
+
+@keyframes ud-spin { to { transform: rotate(360deg); } }
+
+/* ── AI Analysis tab ── */
+.ud-ai-card {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #f0f0f0;
+}
+
+.ud-ai-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ud-ai-body {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.ud-ai-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ud-ai-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ud-ai-stat-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  flex-shrink: 0;
+  min-width: 90px;
+}
+
+.ud-ai-stat-bar {
+  flex: 1;
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ud-ai-stat-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.ud-ai-stat-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111;
+  min-width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ud-ai-items {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ud-ai-item {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+  padding-left: 14px;
+  position: relative;
+}
+
+.ud-ai-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.ud-ai-strengths .ud-ai-item::before { background: #4caf50; }
+.ud-ai-recs .ud-ai-item::before { background: #1E47F7; }
+.ud-ai-deadlines .ud-ai-item::before { background: #ffa726; }
+
+/* Responsive */
+@media (max-width: 320px) {
+  .ud-uni-name { font-size: 15px; }
+  .ud-content { padding: 12px; gap: 10px; }
+  .ud-section { padding: 13px; }
+}
+
+@media (min-width: 414px) {
+  .ud-uni-name { font-size: 19px; }
+  .ud-content { padding: 18px; }
+}

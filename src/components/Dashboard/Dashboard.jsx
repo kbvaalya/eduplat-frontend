@@ -116,8 +116,8 @@ export default function Dashboard({ onNavigate }) {
     setOpenMenuId(null);
   };
 
-  const handleNav = (key) => {
-    if (onNavigate) onNavigate(key);
+  const handleNav = (key, id) => {
+    if (onNavigate) onNavigate(key, id);
   };
 
   // Считаем дни до ближайшего дедлайна (если есть)
@@ -278,7 +278,7 @@ export default function Dashboard({ onNavigate }) {
                     </div>
                   </div>
 
-                  <button className="dash-detail-btn">Узнать подробнее</button>
+                  <button className="dash-detail-btn" onClick={() => handleNav("uni-detail", uni.id)}>Узнать подробнее</button>
                 </div>
               </div>
             );

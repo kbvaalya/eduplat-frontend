@@ -1,0 +1,97 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.nf-root {
+  width: 100vw;
+  height: 100dvh;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 32px 24px;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Blur blobs */
+.nf-blob1 {
+  position: absolute;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34,197,94,0.3) 0%, transparent 70%);
+  top: 10%; left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.nf-blob2 {
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%);
+  top: 15%; left: 35%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  filter: blur(30px);
+}
+
+.nf-number {
+  font-size: 96px;
+  font-weight: 900;
+  color: #1E47F7;
+  line-height: 1;
+  margin-bottom: 20px;
+  letter-spacing: -4px;
+  position: relative;
+  z-index: 1;
+}
+
+.nf-number span {
+  color: #111;
+}
+
+.nf-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.nf-sub {
+  font-size: 14px;
+  color: #888;
+  line-height: 1.6;
+  max-width: 280px;
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.nf-btn {
+  width: 100%;
+  max-width: 320px;
+  height: 54px;
+  background: #1E47F7;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.nf-btn:hover { background: #1535c5; }
+
+@media (max-width: 320px) {
+  .nf-number { font-size: 76px; }
+  .nf-title { font-size: 17px; }
+}
