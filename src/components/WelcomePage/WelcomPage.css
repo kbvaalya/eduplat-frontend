@@ -144,20 +144,20 @@ html, body {
 
 /* ── iPhone 12/13/14 mini, средние Android (390–413px) ── */
 @media (min-width: 390px) and (max-width: 413px) {
-  .bigCm { width: 620px; height: 620px; top: -20%; }
-  .img { top: -3%; }
+  .bigCm { width: 570px; height: 570px; top: -30%; }
+  .img { top: -10%; }
   .App { bottom: 36px; }
 }
 
 /* ── iPhone 14/15, большие Android (414–429px) ── */
 @media (min-width: 414px) and (max-width: 429px) {
-  .bigCm { width: 600px; height: 600px; top: -25%; }
+  .bigCm { width: 600px; height: 600px; top: -35%; }
   .App { bottom: 40px; }
 }
 
 /* ── iPhone 14/15 Plus, Pro Max (430px+) ── */
 @media (min-width: 430px) {
-  .bigCm { width: 600px; height: 600px; top: -55%; }
+  .bigCm { width: 580px; height: 580px; top: -55%; }
   .button1, .button2 { width: 390px; }
   .App { bottom: 44px; }
 }
@@ -165,7 +165,7 @@ html, body {
 /* ── По высоте: очень маленький экран (< 600px) ── */
 @media (max-height: 599px) {
   .bigCm { top: -60%; width: 500px; height: 500px; }
-  .img { top: -20%; }
+  .img { top: -15%; }
   .text h1 { font-size: 20px; }
   .text p { font-size: 12px; }
   .button1, .button2 { height: 44px; font-size: 14px; }
@@ -175,28 +175,28 @@ html, body {
 
 /* ── По высоте: маленький экран (600–699px) ── */
 @media (min-height: 600px) and (max-height: 699px) {
-  .bigCm { top: -28%; }
-  .img { top: -20%; }
+  .bigCm { top: -32%; }
+  .img { top: -28%; }
   .App { bottom: 24px; }
 }
 
 /* ── По высоте: средний экран (700–799px) ── */
 @media (min-height: 700px) and (max-height: 799px) {
-  .bigCm { top: -25%; }
+  .bigCm { top: -20%; }
   .img { top: -12%; }
   .App { bottom: 32px; }
 }
 
 /* ── По высоте: большой экран (800–899px) ── */
 @media (min-height: 800px) and (max-height: 899px) {
-  .bigCm { top: -15%; }
+  .bigCm { top: -20%; }
   .img { top: -8%; }
   .App { bottom: 40px; }
 }
 
 /* ── По высоте: очень большой экран (900px+) ── */
 @media (min-height: 900px) {
-  .bigCm { top: -12%; }
+  .bigCm { top: -15%; }
   .img { top: -2%; }
   .App { bottom: 50px; }
 }

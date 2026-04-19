@@ -12,6 +12,12 @@ html, body {
   overflow: hidden;
   position: fixed;
 }
+.img2 {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  z-index: 4;
+}
 
 .container {
   width: 100vw;
@@ -133,7 +139,7 @@ html, body {
 
 .back-btn {
   position: fixed;
-  top: 28%;
+  top: 31%;
   left: 6px;
   background: none;
   border: none;
@@ -155,7 +161,7 @@ html, body {
   .inputLogin { height: 44px; font-size: 13px; }
   .button { height: 46px; font-size: 14px; }
   .form { gap: 14px; }
-  .back-btn { font-size: 14px; top: 26%; }
+  .back-btn { font-size: 14px; top: 23%; }
 }
 
 /* ── Маленькие (321–374px) ── */
@@ -193,7 +199,7 @@ html, body {
   .button { height: 42px; font-size: 14px; }
   .text1 h1 { font-size: 18px; }
   .form { gap: 12px; }
-  .back-btn { top: 22%; }
+  .back-btn { top: 18%; }
 }
 
 /* ── По высоте: маленький (600–699px) ── */

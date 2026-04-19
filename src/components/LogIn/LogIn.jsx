@@ -43,7 +43,7 @@ function LogIn({ onNavigate }) {
   return (
     <div className="container">
       <div className='bigC'>
-        <img src={back} alt='' className='img1' />
+        <img src={back} alt='' className='img2' />
       </div>
       <button className='back-btn' onClick={() => onNavigate("back")}>‹ Назад</button>
       <div className="containerLogIn">
