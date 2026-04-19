@@ -11,9 +11,9 @@ import Opportunities from './components/Opportunities/Opportunities.jsx';
 import EssayCheck from './components/EssayCheck/EssayCheck.jsx';
 import Dashboard from './components/Dashboard/Dashboard.jsx';
 import Premium from './components/Premium/Premium.jsx';
-import NotFound from './components/Notfound/Notfound.jsx';
-import UniversityDetail from './components/Universitydetail/Universitydetail.jsx';
-import OpportunityDetail from './components/Opportunitydetail/Opportunitydetail.jsx';
+import NotFound from './components/NotFound/NotFound.jsx';
+import UniversityDetail from './components/UniversityDetail/UniversityDetail.jsx';
+import OpportunityDetail from './components/OpportunityDetail/OpportunityDetail.jsx';
 
 function App() {
   const [page, setPage] = useState("welcome");
