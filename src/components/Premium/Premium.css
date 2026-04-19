@@ -1,0 +1,212 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.prem-root {
+  width: 100vw;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+}
+
+/* Back */
+.prem-back {
+  padding: 14px 20px 6px;
+  flex-shrink: 0;
+}
+
+.prem-back-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+
+/* Hero */
+.prem-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 20px 10px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.prem-glow {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34,197,94,0.35) 0%, rgba(59,130,246,0.25) 50%, transparent 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 20px rgba(34,197,94,0.3));
+}
+
+.prem-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+/* Feature list */
+.prem-features {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.prem-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.prem-feature-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f0f4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.prem-feature-text { flex: 1; }
+
+.prem-feature-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+.prem-feature-sub {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.4;
+}
+
+/* Plans */
+.prem-plans {
+  padding: 0 20px 20px;
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.prem-plan {
+  flex: 1;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 16px 14px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+}
+
+.prem-plan--active {
+  border-color: #1E47F7;
+  background: #f8f9ff;
+}
+
+.prem-plan-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1E47F7;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.prem-plan-period {
+  font-size: 12px;
+  color: #888;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.prem-plan-price {
+  font-size: 26px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.prem-plan-desc {
+  font-size: 11px;
+  color: #888;
+  line-height: 1.4;
+}
+
+/* CTA */
+.prem-cta {
+  padding: 0 20px 32px;
+  flex-shrink: 0;
+}
+
+.prem-cta-btn {
+  width: 100%;
+  height: 56px;
+  background: linear-gradient(90deg, #1E47F7 0%, #22c55e 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.prem-cta-btn:hover { opacity: 0.92; }
+
+/* Responsive */
+@media (max-width: 320px) {
+  .prem-title { font-size: 20px; }
+  .prem-glow { width: 100px; height: 100px; font-size: 50px; }
+  .prem-plan-price { font-size: 22px; }
+  .prem-features { padding: 12px 16px 16px; gap: 12px; }
+  .prem-plans { padding: 0 16px 16px; }
+  .prem-cta { padding: 0 16px 24px; }
+}
+
+@media (min-width: 414px) {
+  .prem-title { font-size: 26px; }
+  .prem-glow { width: 130px; height: 130px; font-size: 64px; }
+  .prem-feature-title { font-size: 15px; }
+  .prem-feature-sub { font-size: 13px; }
+}
+
+@media (min-height: 800px) {
+  .prem-hero { padding: 28px 20px 14px; }
+  .prem-features { gap: 18px; }
+}

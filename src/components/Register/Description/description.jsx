@@ -2,7 +2,6 @@ import { useState } from "react";
 import "./description.css";
 import { userApi } from "../../../api.js";
 
-
 const categoryMap = {
   "Волонтерство": "volunteering",
   "Лидерский опыт": "leadership",
@@ -70,7 +69,6 @@ export default function Description({ onNavigate }) {
     setLoading(true);
     setServerError("");
     try {
-      // 1. Основная инфо
       await userApi.updateAbout({
         name: values["Имя"],
         email: values["Эл почта"],
@@ -78,7 +76,6 @@ export default function Description({ onNavigate }) {
         grade: values["Класс"],
       });
 
-      // 2. Академическая инфо
       await userApi.updateAcademic({
         gpa: parseFloat(values["GPA"]) || null,
         sat: parseInt(values["Результат SAT"]) || null,
@@ -86,7 +83,6 @@ export default function Description({ onNavigate }) {
         toefl: parseInt(values["Результат TOEFL"]) || null,
       });
 
-      // 3. Внеучебные активности
       const selectedCategories = (values["Категория (можно выбрать несколько)"] || [])
         .map((c) => categoryMap[c])
         .filter(Boolean);
@@ -96,7 +92,7 @@ export default function Description({ onNavigate }) {
         years_active: values["Годы деятельности"] || "",
       });
 
-      onNavigate("home");
+      onNavigate("dashboard"); // ← главная страница
     } catch (err) {
       setServerError(err.message);
       setLoading(false);
@@ -104,12 +100,8 @@ export default function Description({ onNavigate }) {
   };
 
   const handleNext = () => {
-    if (!allFilled) {
-      setShowErrors(true);
-      return;
-    }
+    if (!allFilled) { setShowErrors(true); return; }
     setShowErrors(false);
-
     if (current === steps.length - 1) {
       submitToBackend();
     } else {
@@ -121,10 +113,7 @@ export default function Description({ onNavigate }) {
     <div>
       <div className="bar-row">
         {steps.map((_, i) => (
-          <div
-            key={i}
-            className={`seg ${i < current || isDone ? "done" : ""}`}
-          />
+          <div key={i} className={`seg ${i < current || isDone ? "done" : ""}`} />
         ))}
       </div>
 
@@ -136,7 +125,7 @@ export default function Description({ onNavigate }) {
             <div className="success-sub">
               Теперь мы рассчитаем твою вероятность поступления
             </div>
-            <button className="btn" onClick={() => onNavigate("home")}>
+            <button className="btn" onClick={() => onNavigate("dashboard")}>
               Начать
             </button>
           </div>
@@ -184,7 +173,6 @@ export default function Description({ onNavigate }) {
                         );
                       })}
                     </div>
-
                   ) : field.type === "choice" ? (
                     <div className="choice-group">
                       {field.options.map((option) => (
@@ -198,7 +186,6 @@ export default function Description({ onNavigate }) {
                         </button>
                       ))}
                     </div>
-
                   ) : (
                     <input
                       className={`finput ${isEmpty ? "finput-error" : ""}`}

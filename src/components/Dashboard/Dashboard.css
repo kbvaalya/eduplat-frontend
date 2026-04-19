@@ -1,0 +1,431 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.dash-root {
+  width: 100vw;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+}
+
+/* ── Header ── */
+.dash-header {
+  background: white;
+  padding: 14px 20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.dash-logo { font-size: 18px; font-weight: 700; color: #111; }
+.dash-logo-arrow { color: #1E47F7; }
+
+.dash-notif-btn {
+  position: absolute;
+  right: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Greeting ── */
+.dash-greeting-row {
+  background: white;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.dash-greeting {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.dash-deadline {
+  font-size: 13px;
+  color: #888;
+}
+
+.dash-deadline strong {
+  color: #111;
+  font-weight: 700;
+}
+
+/* ── Premium banner ── */
+.dash-premium-banner {
+  margin: 14px 16px 6px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1E47F7 0%, #3b82f6 40%, #22c55e 100%);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  transition: opacity 0.15s;
+  min-height: 100px;
+}
+
+.dash-premium-banner:hover { opacity: 0.95; }
+
+.dash-premium-banner::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  right: 50px;
+  width: 120px;
+  height: 120px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+
+.dash-premium-text { flex: 1; z-index: 1; }
+
+.dash-premium-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.dash-premium-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.dash-premium-img {
+  font-size: 52px;
+  line-height: 1;
+  z-index: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+}
+
+/* ── Section header ── */
+.dash-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 10px;
+  flex-shrink: 0;
+}
+
+.dash-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+}
+
+.dash-add-btn {
+  background: #1E47F7;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background 0.2s;
+}
+
+.dash-add-btn:hover { background: #1535c5; }
+
+/* ── Empty state ── */
+.dash-empty {
+  margin: 16px 16px 0;
+  background: white;
+  border-radius: 18px;
+  padding: 40px 24px;
+  text-align: center;
+  border: 1.5px dashed #e0e0e0;
+  flex-shrink: 0;
+}
+
+.dash-empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+.dash-empty-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.dash-empty-sub {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.dash-empty-btn {
+  background: #1E47F7;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.dash-empty-btn:hover { background: #1535c5; }
+
+/* ── University list ── */
+.dash-list {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── University card ── */
+.dash-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.dash-card-delete-reveal {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  background: #ff4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  border-radius: 0 16px 16px 0;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+  transition: width 0.2s;
+  z-index: 2;
+}
+
+.dash-card-delete-reveal-hidden { display: none; }
+
+.dash-card-delete-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  margin-top: 2px;
+}
+
+.dash-card-inner {
+  padding: 16px;
+  position: relative;
+}
+
+.dash-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.dash-card-left { flex: 1; min-width: 0; }
+
+.dash-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 8px;
+}
+
+.dash-card-location { font-size: 12px; color: #888; }
+
+.dash-card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.dash-card-prob { font-size: 15px; font-weight: 700; color: #111; }
+
+.dash-card-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* 3-dot menu */
+.dash-card-menu-wrap {
+  position: relative;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.dash-card-dots {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 6px;
+  color: #888;
+  font-size: 18px;
+  line-height: 1;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.dash-card-dots:hover { background: #f5f5f5; }
+
+.dash-card-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: white;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  z-index: 100;
+  overflow: hidden;
+  min-width: 120px;
+}
+
+.dash-card-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  background: none;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+  color: #e53935;
+}
+
+.dash-card-dropdown-item:hover { background: #fff5f5; }
+
+/* Stats */
+.dash-card-stats {
+  display: flex;
+  border-top: 1px solid #f5f5f5;
+  padding-top: 12px;
+  margin-bottom: 12px;
+}
+
+.dash-stat { flex: 1; }
+.dash-stat-label { font-size: 11px; color: #aaa; margin-bottom: 2px; }
+.dash-stat-value { font-size: 14px; font-weight: 600; color: #333; }
+
+.dash-detail-btn {
+  width: 100%;
+  background: #1E47F7;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.dash-detail-btn:hover { background: #1535c5; }
+
+/* Loading */
+.dash-loading {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 15px;
+  color: #888;
+}
+
+/* ── Bottom nav ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 64px;
+  background: white;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  flex: 1;
+  font-family: inherit;
+}
+
+.bottom-nav-label { font-size: 10px; color: #888; font-weight: 500; }
+.bottom-nav-item--active .bottom-nav-label { color: #1E47F7; }
+
+/* Responsive */
+@media (max-width: 320px) {
+  .dash-greeting { font-size: 18px; }
+  .dash-list { padding: 0 12px; }
+  .dash-section-header { padding: 14px 14px 8px; }
+  .dash-premium-banner { margin: 12px 12px 6px; padding: 14px 16px; }
+  .dash-premium-title { font-size: 13px; }
+  .dash-premium-img { font-size: 42px; }
+  .bottom-nav-label { font-size: 9px; }
+}
+
+@media (min-width: 414px) {
+  .dash-greeting { font-size: 24px; }
+  .dash-card-inner { padding: 18px; }
+  .dash-card-name { font-size: 17px; }
+  .dash-premium-title { font-size: 16px; }
+}

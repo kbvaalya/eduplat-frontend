@@ -2,44 +2,44 @@ import { useState } from "react";
 import './LogIn.css'
 import back from '../../../assets/back.png'
 import { authApi } from '../../api.js'
-
+ 
 function LogIn({ onNavigate }) {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
-
+ 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: undefined });
   };
-
+ 
   const validate = () => {
     const newErrors = {};
     if (!formData.email.trim()) newErrors.email = "Введите email";
     if (!formData.password.trim()) newErrors.password = "Введите пароль";
     return newErrors;
   };
-
+ 
   const handleSubmit = async () => {
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
+ 
     setLoading(true);
     try {
       const data = await authApi.login(formData.email, formData.password);
       localStorage.setItem("token", data.access_token);
-      onNavigate("home");
+      onNavigate("dashboard"); // ← главная страница
     } catch (err) {
       setErrors({ server: err.message });
     } finally {
       setLoading(false);
     }
   };
-
+ 
   return (
     <div className="container">
       <div className='bigC'>
@@ -50,20 +50,20 @@ function LogIn({ onNavigate }) {
         <div className='text1'>
           <h1>Войдите в аккаунт</h1>
         </div>
-
+ 
         {errors.server && (
           <span className="error" style={{ color: "red", textAlign: "center" }}>
             {errors.server}
           </span>
         )}
-
+ 
         <form className='form'>
           <label className='label'>
             Email
             <input type="email" name="email" className='inputLogin' onChange={handleChange} />
             {errors.email && <span className="error">{errors.email}</span>}
           </label>
-
+ 
           <label className='label'>
             Пароль
             <div style={{ position: "relative" }}>
@@ -91,7 +91,7 @@ function LogIn({ onNavigate }) {
             {errors.password && <span className="error">{errors.password}</span>}
           </label>
         </form>
-
+ 
         <div>
           <button className='button' onClick={handleSubmit} disabled={loading}>
             {loading ? "Загрузка..." : "Войти"}
@@ -101,5 +101,5 @@ function LogIn({ onNavigate }) {
     </div>
   );
 }
-
+ 
 export default LogIn;

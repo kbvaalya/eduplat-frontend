@@ -9,13 +9,20 @@ import Description from './components/Register/Description/description.jsx';
 import Profile from './components/Profile/Profile.jsx';
 import Opportunities from './components/Opportunities/Opportunities.jsx';
 import EssayCheck from './components/EssayCheck/EssayCheck.jsx';
+import Dashboard from './components/Dashboard/Dashboard.jsx';
+import Premium from './components/Premium/Premium.jsx';
 
 function App() {
   const [page, setPage] = useState("welcome");
+  const [prevPage, setPrevPage] = useState("dashboard");
 
   const handleNavigate = (p) => {
-    if (p === "back") setPage("welcome");
-    else setPage(p);
+    if (p === "back") {
+      setPage(prevPage);
+    } else {
+      setPrevPage(page);
+      setPage(p);
+    }
   };
 
   return (
@@ -24,10 +31,12 @@ function App() {
       {page === "register"      && <Register      onNavigate={handleNavigate} />}
       {page === "login"         && <LogIn         onNavigate={handleNavigate} />}
       {page === "description"   && <Description   onNavigate={handleNavigate} />}
+      {page === "dashboard"     && <Dashboard     onNavigate={handleNavigate} />}
       {page === "home"          && <Home          onNavigate={handleNavigate} />}
       {page === "profile"       && <Profile       onNavigate={handleNavigate} />}
       {page === "opportunities" && <Opportunities onNavigate={handleNavigate} />}
       {page === "essay"         && <EssayCheck    onNavigate={handleNavigate} />}
+      {page === "premium"       && <Premium       onNavigate={handleNavigate} />}
     </div>
   );
 }
