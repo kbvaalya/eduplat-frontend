@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import "./Opportunities.css";
 import { opportunitiesApi } from "../../api.js";
+// Place Group_18.png in src/assets/ and import it:
+// import logoArrow from "../../assets/Group_18.png";
 
 const CATEGORIES = [
   { key: "", label: "All" },
@@ -55,6 +57,22 @@ const NAV_ITEMS = [
   },
 ];
 
+/* ── Logo component using Group_18.png ── */
+function Logo() {
+  return (
+    <div className="opp-logo">
+      {/* If you add Group_18.png to src/assets/, use:
+          <img src={logoArrow} alt="" className="opp-logo-img" />
+          Otherwise the SVG arrow below is used as fallback */}
+      <svg className="opp-logo-img" width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect width="18" height="18" rx="4" fill="#1E47F7"/>
+        <path d="M5 13L13 5M13 5H8M13 5V10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+      Eduplat
+    </div>
+  );
+}
+
 export default function Opportunities({ onNavigate }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,9 +81,7 @@ export default function Opportunities({ onNavigate }) {
   const [savedIds, setSavedIds] = useState([]);
   const [toast, setToast] = useState("");
 
-  useEffect(() => {
-    loadSaved();
-  }, []);
+  useEffect(() => { loadSaved(); }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => loadEvents(), 300);
@@ -117,13 +133,15 @@ export default function Opportunities({ onNavigate }) {
 
   return (
     <div className="opp-root">
+      {/* Mobile header */}
       <div className="opp-header">
-        <div className="opp-logo"><span className="opp-logo-arrow">↗</span>Eduplat</div>
+        <Logo />
       </div>
 
       <div className="opp-page-wrap">
+        {/* Desktop sidebar */}
         <aside className="opp-sidebar">
-          <div className="opp-sidebar-logo"><span className="opp-logo-arrow">↗</span>Eduplat</div>
+          <div className="opp-sidebar-logo"><Logo /></div>
           {NAV_ITEMS.map((item) => (
             <button
               key={item.key}
@@ -155,6 +173,7 @@ export default function Opportunities({ onNavigate }) {
             />
           </div>
 
+          {/* Categories */}
           <div className="opp-cats">
             {CATEGORIES.map((cat) => (
               <button
@@ -167,6 +186,7 @@ export default function Opportunities({ onNavigate }) {
             ))}
           </div>
 
+          {/* List */}
           <div className="opp-list">
             {loading ? (
               <div className="opp-loading">Loading...</div>
@@ -179,6 +199,7 @@ export default function Opportunities({ onNavigate }) {
                   event={event}
                   saved={savedIds.includes(event.id)}
                   onSave={() => toggleSave(event)}
+                  onDetail={() => handleNav("opp-detail", event.id)}
                 />
               ))
             )}
@@ -208,16 +229,34 @@ export default function Opportunities({ onNavigate }) {
   );
 }
 
-function EventCard({ event, saved, onSave }) {
+/* ── Event Card with working image loading ── */
+function EventCard({ event, saved, onSave, onDetail }) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="event-card">
       <div className="event-card-inner">
         <div className="event-img-wrap">
-          {event.image_url
-            ? <img src={event.image_url} alt={event.title} className="event-img" />
-            : <div className="event-img-placeholder" />
-          }
+          {event.image_url && !imgError ? (
+            <img
+              src={event.image_url}
+              alt={event.title}
+              className="event-img"
+              onError={() => setImgError(true)}
+              crossOrigin="anonymous"
+            />
+          ) : (
+            <div className="event-img-placeholder">
+              <span className="event-img-placeholder-icon">
+                {event.type === "internship" ? "💼" :
+                 event.type === "volunteering" ? "🤝" :
+                 event.type === "hackathon" ? "💻" :
+                 event.type === "conference" ? "🎤" : "🎓"}
+              </span>
+            </div>
+          )}
         </div>
+
         <div className="event-content">
           <div className="event-top">
             <div className="event-title">{event.title}</div>
@@ -233,24 +272,37 @@ function EventCard({ event, saved, onSave }) {
               )}
             </button>
           </div>
+
+          {event.type && (
+            <span className="event-type-badge">
+              {event.type.charAt(0).toUpperCase() + event.type.slice(1)}
+            </span>
+          )}
+
           <div className="event-desc">{event.short_description}</div>
+
           <div className="event-dates">
-            <span className="event-date-item">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
-                <rect x="3" y="4" width="18" height="18" rx="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-                <line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-              {event.event_date}
-            </span>
-            <span className="event-date-item">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-              </svg>
-              {event.deadline}
-            </span>
+            {event.event_date && (
+              <span className="event-date-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                {event.event_date}
+              </span>
+            )}
+            {event.deadline && (
+              <span className="event-date-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                Deadline: {event.deadline}
+              </span>
+            )}
           </div>
-          <button className="event-more-btn">Learn More</button>
+
+          <button className="event-more-btn" onClick={onDetail}>Learn More</button>
         </div>
       </div>
     </div>

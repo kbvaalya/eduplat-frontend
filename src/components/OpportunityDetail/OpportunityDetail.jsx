@@ -3,16 +3,17 @@ import "./OpportunityDetail.css";
 import { opportunitiesApi } from "../../api.js";
 
 const TYPE_LABELS = {
-  internship: "Стажировка",
-  volunteering: "Волонтерство",
-  hackathon: "Хакатон",
-  conference: "Конференция",
+  internship: "Internship",
+  volunteering: "Volunteering",
+  hackathon: "Hackathon",
+  conference: "Conference",
 };
 
 export default function OpportunityDetail({ oppId, onNavigate }) {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
     if (oppId) loadEvent();
@@ -25,23 +26,29 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
       const data = await opportunitiesApi.getById(oppId);
       setEvent(data);
     } catch (err) {
-      setError(err.message || "Ошибка загрузки");
+      setError(err.message || "Loading error");
     } finally {
       setLoading(false);
     }
   };
 
-  const hasImage = event?.image_url;
+  const hasImage = event?.image_url && !imgError;
 
   return (
     <div className="od-root">
 
-      {/* Hero image (if exists) */}
+      {/* Hero image (if exists and no error) */}
       {!loading && event && hasImage ? (
         <div className="od-img-wrap">
-          <img src={event.image_url} alt={event.title} className="od-img" />
+          <img
+            src={event.image_url}
+            alt={event.title}
+            className="od-img"
+            onError={() => setImgError(true)}
+            crossOrigin="anonymous"
+          />
           <button className="od-back-over" onClick={() => onNavigate("back")}>
-            ‹ Назад
+            ‹ Back
           </button>
         </div>
       ) : !loading && event && !hasImage ? (
@@ -50,7 +57,7 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
             <div className="od-logo"><span className="od-logo-arrow">↗</span>Eduplat</div>
           </div>
           <div className="od-back-row">
-            <button className="od-back-btn" onClick={() => onNavigate("back")}>‹ Назад</button>
+            <button className="od-back-btn" onClick={() => onNavigate("back")}>‹ Back</button>
           </div>
         </>
       ) : null}
@@ -62,11 +69,11 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
             <div className="od-logo"><span className="od-logo-arrow">↗</span>Eduplat</div>
           </div>
           <div className="od-back-row">
-            <button className="od-back-btn" onClick={() => onNavigate("back")}>‹ Назад</button>
+            <button className="od-back-btn" onClick={() => onNavigate("back")}>‹ Back</button>
           </div>
           <div className="od-loading">
             <div className="od-spinner" />
-            Загрузка...
+            Loading...
           </div>
         </>
       )}
@@ -100,7 +107,7 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
                     <circle cx="12" cy="12" r="10"/>
                     <polyline points="12 6 12 12 16 14"/>
                   </svg>
-                  Дедлайн: {event.deadline}
+                  Deadline: {event.deadline}
                 </div>
               )}
               {event.location && (
@@ -121,49 +128,45 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
             {/* Description */}
             {(event.description || event.short_description) && (
               <div>
-                <div className="od-section-title">
-                  <span>📄</span> Подробнее
-                </div>
-                <div className="od-desc">
-                  {event.description || event.short_description}
-                </div>
+                <div className="od-section-title"><span>📄</span> Details</div>
+                <div className="od-desc">{event.description || event.short_description}</div>
               </div>
             )}
 
             {/* Info grid */}
-            <div className="od-info-grid">
-              {event.format && (
-                <div className="od-info-cell">
-                  <div className="od-info-label">Формат</div>
-                  <div className="od-info-value">{event.format}</div>
-                </div>
-              )}
-              {event.time && (
-                <div className="od-info-cell">
-                  <div className="od-info-label">Время</div>
-                  <div className="od-info-value">{event.time}</div>
-                </div>
-              )}
-              {event.age_range && (
-                <div className="od-info-cell">
-                  <div className="od-info-label">Возраст</div>
-                  <div className="od-info-value">{event.age_range}</div>
-                </div>
-              )}
-              {event.duration && (
-                <div className="od-info-cell">
-                  <div className="od-info-label">Длительность</div>
-                  <div className="od-info-value">{event.duration}</div>
-                </div>
-              )}
-            </div>
+            {(event.format || event.time || event.age_range || event.duration) && (
+              <div className="od-info-grid">
+                {event.format && (
+                  <div className="od-info-cell">
+                    <div className="od-info-label">Format</div>
+                    <div className="od-info-value">{event.format}</div>
+                  </div>
+                )}
+                {event.time && (
+                  <div className="od-info-cell">
+                    <div className="od-info-label">Time</div>
+                    <div className="od-info-value">{event.time}</div>
+                  </div>
+                )}
+                {event.age_range && (
+                  <div className="od-info-cell">
+                    <div className="od-info-label">Age</div>
+                    <div className="od-info-value">{event.age_range}</div>
+                  </div>
+                )}
+                {event.duration && (
+                  <div className="od-info-cell">
+                    <div className="od-info-label">Duration</div>
+                    <div className="od-info-value">{event.duration}</div>
+                  </div>
+                )}
+              </div>
+            )}
 
-            {/* What awaits */}
+            {/* Benefits */}
             {event.benefits && event.benefits.length > 0 && (
               <div>
-                <div className="od-section-title">
-                  <span>🎁</span> Что вас ждёт
-                </div>
+                <div className="od-section-title"><span>🎁</span> What you'll get</div>
                 <ul className="od-list">
                   {event.benefits.map((b, i) => (
                     <li key={i} className="od-list-item">{b}</li>
@@ -175,9 +178,7 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
             {/* Requirements */}
             {event.requirements && event.requirements.length > 0 && (
               <div>
-                <div className="od-section-title">
-                  <span>📋</span> Требования
-                </div>
+                <div className="od-section-title"><span>📋</span> Requirements</div>
                 <ul className="od-list">
                   {event.requirements.map((r, i) => (
                     <li key={i} className="od-list-item">{r}</li>
@@ -188,23 +189,18 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
 
             {/* Free badge */}
             {event.is_free && (
-              <div>
-                <div className="od-free-badge">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="#2e7d32" strokeWidth="2">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                  Бесплатное мероприятие
-                </div>
+              <div className="od-free-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" strokeWidth="2">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Free event
               </div>
             )}
 
             {/* Organizer */}
             {event.organizer && (
               <div>
-                <div className="od-section-title">
-                  <span>🏢</span> Организатор
-                </div>
+                <div className="od-section-title"><span>🏢</span> Organizer</div>
                 <div className="od-desc">{event.organizer}</div>
               </div>
             )}
@@ -217,7 +213,7 @@ export default function OpportunityDetail({ oppId, onNavigate }) {
               className="od-cta-btn"
               onClick={() => event.link && window.open(event.link, "_blank")}
             >
-              Продолжить
+              Apply Now
             </button>
           </div>
 

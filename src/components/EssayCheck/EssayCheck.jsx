@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./EssayCheck.css";
-import { essayApi } from "../../api.js";
 
 const NAV_ITEMS = [
   {
@@ -47,164 +46,180 @@ const NAV_ITEMS = [
   },
 ];
 
-const GAUGE_COLORS = {
-  green:  "#4caf50",
-  yellow: "#ffa726",
-  red:    "#e53935",
-};
+const QUICK_PROMPTS = [
+  "How do I write a strong motivation letter?",
+  "What GPA do top universities require?",
+  "How to prepare for SAT/IELTS?",
+  "What extracurriculars help admissions?",
+];
 
-function ScoreGauge({ score, color }) {
-  const size = 82;
-  const sw = 8;
-  const r = (size - sw) / 2;
-  const circ = 2 * Math.PI * r;
-  const fill = (score / 10) * circ;
-  const strokeColor = GAUGE_COLORS[color] || "#1E47F7";
+const SYSTEM_PROMPT = `You are Eduplat's expert university admissions advisor. You help students:
+- Write and improve motivation letters and essays
+- Understand university requirements (GPA, SAT, IELTS, TOEFL)
+- Plan their extracurricular activities
+- Choose the right universities for their profile
+- Navigate the application process
 
-  return (
-    <div className="score-gauge-wrap">
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#f0f0f0" strokeWidth={sw} />
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={strokeColor} strokeWidth={sw}
-          strokeDasharray={`${fill} ${circ - fill}`} strokeLinecap="round" />
-      </svg>
-      <div className="score-center">
-        <span className="score-number">{score}</span>
-        <span className="score-denom">/ 10</span>
-      </div>
-    </div>
-  );
-}
-
-function ResultSection({ title, items, type, dotColor }) {
-  if (!items || items.length === 0) return null;
-  return (
-    <div className={`result-section section-${type}`}>
-      <div className="result-section-header">
-        <div className="result-dot" style={{ background: dotColor }} />
-        <span className="result-section-title">{title}</span>
-      </div>
-      <div className="result-items">
-        {items.map((item, i) => (
-          <div key={i} className="result-item">{item}</div>
-        ))}
-      </div>
-    </div>
-  );
-}
+Be concise, encouraging, and practical. Use bullet points when listing things.
+Keep responses under 300 words unless asked for more detail.
+Speak only in English.`;
 
 export default function EssayCheck({ onNavigate }) {
-  const [text, setText] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      role: "assistant",
+      content: "Hi! I'm your Eduplat AI advisor 🎓\n\nI can help you with motivation letters, university requirements, application strategies, and any admissions questions. What would you like to know?",
+    },
+  ]);
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState("");
+  const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
-  const MIN_CHARS = 100;
-  const MAX_CHARS = 10000;
-  const charCount = text.length;
-  const isReady = charCount >= MIN_CHARS && charCount <= MAX_CHARS;
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
-  const charClass = charCount === 0 ? "" : charCount < MIN_CHARS ? "warn" : "ok";
+  const sendMessage = async (text) => {
+    const userText = (text || input).trim();
+    if (!userText || loading) return;
 
-  const handleAnalyze = async () => {
-    if (!isReady) return;
-    setError("");
+    const newMessages = [...messages, { role: "user", content: userText }];
+    setMessages(newMessages);
+    setInput("");
     setLoading(true);
-    setResult(null);
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "44px";
+    }
 
     try {
-      const data = await essayApi.analyze(text);
-      setResult(data);
-    } catch (err) {
-      setError(err.message || "Could not connect to server.");
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: SYSTEM_PROMPT,
+          messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
+        }),
+      });
+
+      const data = await response.json();
+      const assistantText =
+        data?.content?.[0]?.text || "Sorry, I couldn't get a response. Please try again.";
+
+      setMessages((prev) => [...prev, { role: "assistant", content: assistantText }]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Connection error. Please check your internet and try again." },
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleReset = () => {
-    setResult(null);
-    setText("");
-    setError("");
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const handleTextareaChange = (e) => {
+    setInput(e.target.value);
+    const el = e.target;
+    el.style.height = "44px";
+    el.style.height = Math.min(el.scrollHeight, 120) + "px";
   };
 
   const handleNav = (key) => { if (onNavigate) onNavigate(key); };
 
+  const formatMessage = (text) =>
+    text.split("\n").map((line, i, arr) => (
+      <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+    ));
+
   return (
     <div className="essay-root">
+      {/* Header */}
       <div className="essay-header">
-        <div className="essay-logo">
-          <span className="essay-logo-arrow">↗</span>Eduplat
-        </div>
+        <div className="essay-logo"><span className="essay-logo-arrow">↗</span>Eduplat</div>
+        <div className="essay-header-sub">AI Admissions Advisor</div>
       </div>
 
-      <div className="essay-title-row">
-        <h1 className="essay-title">Essay Check 🎓</h1>
-        <p className="essay-subtitle">AI will evaluate your motivation letter and give advice</p>
+      {/* Messages */}
+      <div className="chat-messages">
+        {messages.map((msg, i) => (
+          <div key={i} className={`chat-bubble-wrap ${msg.role === "user" ? "chat-bubble-wrap--user" : ""}`}>
+            {msg.role === "assistant" && (
+              <div className="chat-avatar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white" stroke="none">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+                </svg>
+              </div>
+            )}
+            <div className={`chat-bubble ${msg.role === "user" ? "chat-bubble--user" : "chat-bubble--ai"}`}>
+              {formatMessage(msg.content)}
+            </div>
+          </div>
+        ))}
+
+        {loading && (
+          <div className="chat-bubble-wrap">
+            <div className="chat-avatar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white" stroke="none">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+              </svg>
+            </div>
+            <div className="chat-bubble chat-bubble--ai chat-bubble--typing">
+              <span className="typing-dot" />
+              <span className="typing-dot" />
+              <span className="typing-dot" />
+            </div>
+          </div>
+        )}
+
+        <div ref={messagesEndRef} />
       </div>
 
-      {!result && !loading && (
-        <>
-          <div className="essay-card">
-            <div className="essay-card-label-row">
-              <span className="essay-card-label">Motivation Letter</span>
-              <span className={`essay-char-count ${charClass}`}>
-                {charCount}/{MAX_CHARS}
-              </span>
-            </div>
-            <textarea
-              className="essay-textarea"
-              placeholder="I want to apply to this university because..."
-              value={text}
-              maxLength={MAX_CHARS}
-              onChange={(e) => { setText(e.target.value); setError(""); }}
-            />
-            <div className="essay-hint">
-              {charCount < MIN_CHARS
-                ? `Minimum ${MIN_CHARS} characters (${MIN_CHARS - charCount} remaining)`
-                : "Ready to analyze"}
-            </div>
-          </div>
-
-          {error && <div className="essay-error">{error}</div>}
-
-          <button className="essay-btn" onClick={handleAnalyze} disabled={!isReady}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-              <path d="M9 11l3 3L22 4"/>
-              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
-            </svg>
-            Check Letter
-          </button>
-        </>
-      )}
-
-      {loading && (
-        <div className="essay-loading-wrap">
-          <div className="essay-spinner" />
-          <div className="essay-loading-text">Analyzing...</div>
+      {/* Quick prompts – only at start */}
+      {messages.length === 1 && !loading && (
+        <div className="chat-quick-prompts">
+          {QUICK_PROMPTS.map((prompt, i) => (
+            <button key={i} className="chat-quick-btn" onClick={() => sendMessage(prompt)}>
+              {prompt}
+            </button>
+          ))}
         </div>
       )}
 
-      {result && (
-        <div className="essay-result">
-          <div className="score-card">
-            <ScoreGauge score={result.score} color={result.color} />
-            <div className="score-info">
-              <span className={`score-badge ${result.color || "yellow"}`}>{result.label}</span>
-              {result.summary && <div className="score-summary">{result.summary}</div>}
-            </div>
-          </div>
+      {/* Input area */}
+      <div className="chat-input-bar">
+        <textarea
+          ref={textareaRef}
+          className="chat-input"
+          placeholder="Ask anything about universities, essays..."
+          value={input}
+          onChange={handleTextareaChange}
+          onKeyDown={handleKeyDown}
+          rows={1}
+          disabled={loading}
+        />
+        <button
+          className={`chat-send-btn ${(!input.trim() || loading) ? "chat-send-btn--disabled" : ""}`}
+          onClick={() => sendMessage()}
+          disabled={!input.trim() || loading}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
 
-          <ResultSection title="Strengths" items={result.strengths} type="strengths" dotColor="#4caf50" />
-          <ResultSection title="Weaknesses" items={result.weaknesses} type="weaknesses" dotColor="#ffa726" />
-          <ResultSection title="Improvement Tips" items={result.suggestions} type="suggestions" dotColor="#1E47F7" />
-
-          <button className="essay-reset-btn" onClick={handleReset}>
-            Check another letter
-          </button>
-        </div>
-      )}
-
+      {/* Bottom nav */}
       <div className="bottom-nav">
         {NAV_ITEMS.map((item) => (
           <button
