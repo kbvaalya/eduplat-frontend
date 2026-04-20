@@ -15,8 +15,8 @@ function WelcomPage({onNavigate}){
                          admissions right now!</p>
                     </div>
                     <div className='but'>
-                        <button className='button1' onClick={() => onNavigate("register")}>Создать аккаунт</button>
-                        <button className='button2' onClick={() => onNavigate("login")}>Войти</button>
+                        <button className='button1' onClick={() => onNavigate("register")}>Create new account</button>
+                        <button className='button2' onClick={() => onNavigate("login")}>Sign in</button>
                     </div>
                 </div>
         </div>
