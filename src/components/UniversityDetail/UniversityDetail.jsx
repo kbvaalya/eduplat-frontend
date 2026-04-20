@@ -40,7 +40,6 @@ export default function UniversityDetail({ uniId, onNavigate }) {
 
   const labelStyle = uni ? getLabelStyle(uni.label) : {};
 
-  // AI analysis stats computed from uni data
   const ambition = uni ? Math.min(100, Math.round((1 - uni.probability / 100) * 60 + 20)) : 0;
   const match = uni ? Math.round(uni.probability) : 0;
   const hit = uni ? Math.min(100, Math.round(uni.probability * 0.85)) : 0;
@@ -93,7 +92,7 @@ export default function UniversityDetail({ uniId, onNavigate }) {
 
             <div className="ud-stats">
               <div className="ud-stat">
-                <div className="ud-stat-label">Вероятность</div>
+                <div className="ud-stat-label">probability</div>
                 <div className="ud-stat-value">{uni.probability}%</div>
               </div>
               <div className="ud-stat">
@@ -117,7 +116,7 @@ export default function UniversityDetail({ uniId, onNavigate }) {
                   <polyline points="15 3 21 3 21 9"/>
                   <line x1="10" y1="14" x2="21" y2="3"/>
                 </svg>
-                Перейти на официальный сайт
+                go to the official website
               </button>
             )}
           </div>
@@ -128,13 +127,13 @@ export default function UniversityDetail({ uniId, onNavigate }) {
               className={`ud-tab ${activeTab === "info" ? "ud-tab--active" : ""}`}
               onClick={() => setActiveTab("info")}
             >
-              Университет
+              University
             </button>
             <button
               className={`ud-tab ${activeTab === "ai" ? "ud-tab--active" : ""}`}
               onClick={() => setActiveTab("ai")}
             >
-              Анализ ИИ
+              AI analysis
             </button>
           </div>
 
@@ -149,13 +148,13 @@ export default function UniversityDetail({ uniId, onNavigate }) {
                   <div className="ud-section">
                     <div className="ud-section-header">
                       <span className="ud-section-icon">🏛️</span>
-                      <span className="ud-section-title">О университете</span>
+                      <span className="ud-section-title">About university</span>
                     </div>
                     <div className="ud-section-body">
                       <p>{uni.description}</p>
-                      {uni.ranking && <p>🏆 Мировой рейтинг: <strong>#{uni.ranking}</strong></p>}
-                      {uni.students_count && <p>👨‍🎓 Студентов: <strong>{uni.students_count.toLocaleString()}</strong></p>}
-                      {uni.founded_year && <p>📅 Основан: <strong>{uni.founded_year}</strong></p>}
+                      {uni.ranking && <p>🏆 World ranking: <strong>#{uni.ranking}</strong></p>}
+                      {uni.students_count && <p>👨‍🎓 Students: <strong>{uni.students_count.toLocaleString()}</strong></p>}
+                      {uni.founded_year && <p>📅 Founded: <strong>{uni.founded_year}</strong></p>}
                     </div>
                   </div>
                 )}
@@ -165,7 +164,7 @@ export default function UniversityDetail({ uniId, onNavigate }) {
                   <div className="ud-section">
                     <div className="ud-section-header">
                       <span className="ud-section-icon">📚</span>
-                      <span className="ud-section-title">Основные направления</span>
+                      <span className="ud-section-title">Main programs</span>
                     </div>
                     <ul className="ud-list">
                       {uni.programs.map((p, i) => (

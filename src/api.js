@@ -1,4 +1,4 @@
-const BASE_URL = "/api/v1";
+const BASE_URL = "https://eduplat-help-girls.onrender.com/api/v1";
 
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("token");
@@ -88,7 +88,7 @@ export const universitiesApi = {
   unsave: (id) => request(`/universities/${id}/save`, { method: "DELETE" }),
 };
 
-// ─── Opportunities ───────────────────────────────────
+// Opportunities
 export const opportunitiesApi = {
   getAll: (filters = {}) => {
     const params = new URLSearchParams();
@@ -104,19 +104,19 @@ export const opportunitiesApi = {
   unsave: (id) => request(`/opportunities/${id}/save`, { method: "DELETE" }),
 };
 
-// ─── Dashboard ───────────────────────────────────────
+// Dashboard 
 export const dashboardApi = {
   get: () => request("/dashboard/"),
 };
 
-// ─── Notifications ───────────────────────────────────
+//Notifications
 export const notificationsApi = {
   getAll: () => request("/notifications/"),
   markRead: (id) => request(`/notifications/${id}/read`, { method: "PATCH" }),
   markAllRead: () => request("/notifications/read-all", { method: "PATCH" }),
 };
 
-// ─── Essay / Motivation Letter ───────────────────────
+// Essay / Motivation Letter
 export const essayApi = {
   analyze: (text) =>
     request("/motivation-letter/analyze", {

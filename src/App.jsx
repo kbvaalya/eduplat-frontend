@@ -26,8 +26,6 @@ function App() {
       setPage(prevPage);
       return;
     }
-
-    // Страницы с ID
     if (p === "uni-detail" && id) {
       setSelectedUniId(id);
     }

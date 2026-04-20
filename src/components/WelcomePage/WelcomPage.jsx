@@ -10,9 +10,9 @@ function WelcomPage({onNavigate}){
                 <img src={imag} alt='' className='img'></img>
                 <div className="App">
                     <div className='text'>
-                        <h1>Добро пожаловать!</h1>
-                        <p>Начни свой путь к поступлению уже <br/>
-                         сейчас!</p>
+                        <h1>Welcome!</h1>
+                        <p>Start your journey to university <br/>
+                         admissions right now!</p>
                     </div>
                     <div className='but'>
                         <button className='button1' onClick={() => onNavigate("register")}>Создать аккаунт</button>
