@@ -4,8 +4,8 @@ import { userApi } from "../../api.js";
 
 const NAV_ITEMS = [
   {
-    key: "home",
-    label: "Главная",
+    key: "dashboard",
+    label: "Home",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   },
   {
     key: "opportunities",
-    label: "Возможности",
+    label: "Opportunities",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -26,21 +26,17 @@ const NAV_ITEMS = [
   },
   {
     key: "essay",
-    label: "AI чат",
+    label: "AI Chat",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-        <polyline points="14 2 14 8 20 8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/>
-        <polyline points="10 9 9 9 8 9"/>
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
       </svg>
     ),
   },
   {
     key: "profile",
-    label: "Профиль",
+    label: "Profile",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -64,9 +60,7 @@ export default function Profile({ onNavigate }) {
     try {
       const data = await userApi.getMe();
       setUser(data);
-    } catch {
-      // если не удалось загрузить — показываем пустой профиль
-    }
+    } catch {}
   };
 
   const handleLogout = () => {
@@ -78,7 +72,7 @@ export default function Profile({ onNavigate }) {
     if (onNavigate) onNavigate(key);
   };
 
-  const name = user?.about?.name || "Пользователь";
+  const name = user?.about?.name || "User";
   const email = user?.email || "";
 
   return (
@@ -96,18 +90,18 @@ export default function Profile({ onNavigate }) {
 
       {/* Section 1 */}
       <div className="profile-section">
-        <ProfileRow icon="👤" label="Настройки профиля" onPress={() => {}} />
-        <ProfileRow icon="🔖" label="Сохранённые" onPress={() => {}} />
-        <ProfileRow icon="💳" label="Подписка" onPress={() => {}} />
+        <ProfileRow icon="👤" label="Profile Settings" onPress={() => {}} />
+        <ProfileRow icon="🔖" label="Saved" onPress={() => {}} />
+        <ProfileRow icon="💳" label="Subscription" onPress={() => {}} />
       </div>
 
       {/* Section 2 */}
       <div className="profile-section">
-        <ProfileRow icon="⚙️" label="Общие настройки" onPress={() => {}} />
+        <ProfileRow icon="⚙️" label="General Settings" onPress={() => {}} />
         <div className="profile-row">
           <div className="profile-row-left">
             <span className="profile-row-icon">🌙</span>
-            <span className="profile-row-label">Тёмный режим</span>
+            <span className="profile-row-label">Dark Mode</span>
           </div>
           <label className="toggle">
             <input
@@ -121,7 +115,7 @@ export default function Profile({ onNavigate }) {
         <div className="profile-row">
           <div className="profile-row-left">
             <span className="profile-row-icon">🔔</span>
-            <span className="profile-row-label">Отключить уведомления</span>
+            <span className="profile-row-label">Disable Notifications</span>
           </div>
           <label className="toggle">
             <input
@@ -132,19 +126,19 @@ export default function Profile({ onNavigate }) {
             <span className="toggle-slider" />
           </label>
         </div>
-        <ProfileRow icon="🌐" label="Язык" onPress={() => {}} />
+        <ProfileRow icon="🌐" label="Language" onPress={() => {}} />
       </div>
 
       {/* Section 3 */}
       <div className="profile-section">
-        <ProfileRow icon="💬" label="Поддержка" onPress={() => {}} />
-        <ProfileRow icon="🔒" label="Политика конфиденциальности" onPress={() => {}} />
+        <ProfileRow icon="💬" label="Support" onPress={() => {}} />
+        <ProfileRow icon="🔒" label="Privacy Policy" onPress={() => {}} />
       </div>
 
       {/* Logout */}
       <div className="profile-section">
         <button className="profile-logout" onClick={handleLogout}>
-          <span>→</span> Выйти с аккаунта
+          <span>→</span> Log Out
         </button>
       </div>
 

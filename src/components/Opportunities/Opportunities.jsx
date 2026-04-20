@@ -3,17 +3,17 @@ import "./Opportunities.css";
 import { opportunitiesApi } from "../../api.js";
 
 const CATEGORIES = [
-  { key: "", label: "Все" },
-  { key: "internship", label: "Стажировки" },
-  { key: "volunteering", label: "Волонтерство" },
-  { key: "hackathon", label: "Хакатоны" },
-  { key: "conference", label: "Конференции" },
+  { key: "", label: "All" },
+  { key: "internship", label: "Internships" },
+  { key: "volunteering", label: "Volunteering" },
+  { key: "hackathon", label: "Hackathons" },
+  { key: "conference", label: "Conferences" },
 ];
 
 const NAV_ITEMS = [
   {
-    key: "home",
-    label: "Главная",
+    key: "dashboard",
+    label: "Home",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -24,7 +24,7 @@ const NAV_ITEMS = [
   },
   {
     key: "opportunities",
-    label: "Возможности",
+    label: "Opportunities",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -34,7 +34,7 @@ const NAV_ITEMS = [
   },
   {
     key: "essay",
-    label: "AI чат",
+    label: "AI Chat",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -44,7 +44,7 @@ const NAV_ITEMS = [
   },
   {
     key: "profile",
-    label: "Профиль",
+    label: "Profile",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -100,15 +100,15 @@ export default function Opportunities({ onNavigate }) {
       if (isSaved) {
         await opportunitiesApi.unsave(event.id);
         setSavedIds(prev => prev.filter(id => id !== event.id));
-        setToast("Убрано из сохранённых");
+        setToast("Removed from saved");
       } else {
         await opportunitiesApi.save(event.id);
         setSavedIds(prev => [...prev, event.id]);
-        setToast("Сохранено в профиле ✓");
+        setToast("Saved to profile ✓");
       }
       setTimeout(() => setToast(""), 2500);
     } catch (err) {
-      setToast("Ошибка: " + err.message);
+      setToast("Error: " + err.message);
       setTimeout(() => setToast(""), 2500);
     }
   };
@@ -138,7 +138,7 @@ export default function Opportunities({ onNavigate }) {
 
         <main className="opp-main">
           <div className="opp-title-row">
-            <h1 className="opp-title">Возможности</h1>
+            <h1 className="opp-title">Opportunities</h1>
           </div>
 
           {/* Search */}
@@ -149,7 +149,7 @@ export default function Opportunities({ onNavigate }) {
             </svg>
             <input
               className="opp-search"
-              placeholder="Поиск..."
+              placeholder="Search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -169,9 +169,9 @@ export default function Opportunities({ onNavigate }) {
 
           <div className="opp-list">
             {loading ? (
-              <div className="opp-loading">Загрузка...</div>
+              <div className="opp-loading">Loading...</div>
             ) : events.length === 0 ? (
-              <div className="opp-empty">Мероприятия не найдены</div>
+              <div className="opp-empty">No events found</div>
             ) : (
               events.map((event) => (
                 <EventCard
@@ -250,7 +250,7 @@ function EventCard({ event, saved, onSave }) {
               {event.deadline}
             </span>
           </div>
-          <button className="event-more-btn">Подробнее</button>
+          <button className="event-more-btn">Learn More</button>
         </div>
       </div>
     </div>

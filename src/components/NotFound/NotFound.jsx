@@ -6,13 +6,13 @@ export default function NotFound({ onNavigate }) {
       <div className="nf-blob1" />
       <div className="nf-blob2" />
       <div className="nf-number">4<span>?</span>4</div>
-      <div className="nf-title">Упс. страница не найдена</div>
+      <div className="nf-title">Oops. Page not found</div>
       <div className="nf-sub">
-        Но пока путь к университету — под контролем.<br />
-        Продолжай с того, где ты остановился.
+        But your path to university is still on track.<br />
+        Continue from where you left off.
       </div>
       <button className="nf-btn" onClick={() => onNavigate("dashboard")}>
-        Вернуться на главную
+        Back to Home
       </button>
     </div>
   );

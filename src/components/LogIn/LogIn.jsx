@@ -16,8 +16,8 @@ function LogIn({ onNavigate }) {
  
   const validate = () => {
     const newErrors = {};
-    if (!formData.email.trim()) newErrors.email = "Введите email";
-    if (!formData.password.trim()) newErrors.password = "Введите пароль";
+    if (!formData.email.trim()) newErrors.email = "Enter your email";
+    if (!formData.password.trim()) newErrors.password = "Enter your password";
     return newErrors;
   };
  
@@ -32,7 +32,7 @@ function LogIn({ onNavigate }) {
     try {
       const data = await authApi.login(formData.email, formData.password);
       localStorage.setItem("token", data.access_token);
-      onNavigate("dashboard"); // ← главная страница
+      onNavigate("dashboard");
     } catch (err) {
       setErrors({ server: err.message });
     } finally {
@@ -45,10 +45,10 @@ function LogIn({ onNavigate }) {
       <div className='bigC'>
         <img src={back} alt='' className='img2' />
       </div>
-      <button className='back-btn' onClick={() => onNavigate("back")}>‹ Назад</button>
+      <button className='back-btn' onClick={() => onNavigate("back")}>‹ Back</button>
       <div className="containerLogIn">
         <div className='text1'>
-          <h1>Войдите в аккаунт</h1>
+          <h1>Sign In</h1>
         </div>
  
         {errors.server && (
@@ -65,7 +65,7 @@ function LogIn({ onNavigate }) {
           </label>
  
           <label className='label'>
-            Пароль
+            Password
             <div style={{ position: "relative" }}>
               <input
                 type={showPassword ? "text" : "password"}
@@ -94,7 +94,7 @@ function LogIn({ onNavigate }) {
  
         <div>
           <button className='button' onClick={handleSubmit} disabled={loading}>
-            {loading ? "Загрузка..." : "Войти"}
+            {loading ? "Loading..." : "Sign In"}
           </button>
         </div>
       </div>

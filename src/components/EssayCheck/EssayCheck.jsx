@@ -4,8 +4,8 @@ import { essayApi } from "../../api.js";
 
 const NAV_ITEMS = [
   {
-    key: "home",
-    label: "Главная",
+    key: "dashboard",
+    label: "Home",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   },
   {
     key: "opportunities",
-    label: "Возможности",
+    label: "Opportunities",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -26,7 +26,7 @@ const NAV_ITEMS = [
   },
   {
     key: "essay",
-    label: "AI чат",
+    label: "AI Chat",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -36,7 +36,7 @@ const NAV_ITEMS = [
   },
   {
     key: "profile",
-    label: "Профиль",
+    label: "Profile",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -70,7 +70,7 @@ function ScoreGauge({ score, color }) {
       </svg>
       <div className="score-center">
         <span className="score-number">{score}</span>
-        <span className="score-denom">из 10</span>
+        <span className="score-denom">/ 10</span>
       </div>
     </div>
   );
@@ -113,11 +113,10 @@ export default function EssayCheck({ onNavigate }) {
     setResult(null);
 
     try {
-      // Используем новый essayApi из api.js → /motivation-letter/analyze
       const data = await essayApi.analyze(text);
       setResult(data);
     } catch (err) {
-      setError(err.message || "Не удалось подключиться к серверу.");
+      setError(err.message || "Could not connect to server.");
     } finally {
       setLoading(false);
     }
@@ -140,30 +139,30 @@ export default function EssayCheck({ onNavigate }) {
       </div>
 
       <div className="essay-title-row">
-        <h1 className="essay-title">Проверка эссе 🎓</h1>
-        <p className="essay-subtitle">ИИ оценит мотивационное письмо и даст советы</p>
+        <h1 className="essay-title">Essay Check 🎓</h1>
+        <p className="essay-subtitle">AI will evaluate your motivation letter and give advice</p>
       </div>
 
       {!result && !loading && (
         <>
           <div className="essay-card">
             <div className="essay-card-label-row">
-              <span className="essay-card-label">Мотивационное письмо</span>
+              <span className="essay-card-label">Motivation Letter</span>
               <span className={`essay-char-count ${charClass}`}>
                 {charCount}/{MAX_CHARS}
               </span>
             </div>
             <textarea
               className="essay-textarea"
-              placeholder="Я хочу поступить в этот университет, потому что..."
+              placeholder="I want to apply to this university because..."
               value={text}
               maxLength={MAX_CHARS}
               onChange={(e) => { setText(e.target.value); setError(""); }}
             />
             <div className="essay-hint">
               {charCount < MIN_CHARS
-                ? `Минимум ${MIN_CHARS} символов (осталось ${MIN_CHARS - charCount})`
-                : "Готово к анализу"}
+                ? `Minimum ${MIN_CHARS} characters (${MIN_CHARS - charCount} remaining)`
+                : "Ready to analyze"}
             </div>
           </div>
 
@@ -174,7 +173,7 @@ export default function EssayCheck({ onNavigate }) {
               <path d="M9 11l3 3L22 4"/>
               <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
             </svg>
-            Проверить письмо
+            Check Letter
           </button>
         </>
       )}
@@ -182,7 +181,7 @@ export default function EssayCheck({ onNavigate }) {
       {loading && (
         <div className="essay-loading-wrap">
           <div className="essay-spinner" />
-          <div className="essay-loading-text">Анализируем...</div>
+          <div className="essay-loading-text">Analyzing...</div>
         </div>
       )}
 
@@ -196,12 +195,12 @@ export default function EssayCheck({ onNavigate }) {
             </div>
           </div>
 
-          <ResultSection title="Сильные стороны" items={result.strengths} type="strengths" dotColor="#4caf50" />
-          <ResultSection title="Слабые стороны" items={result.weaknesses} type="weaknesses" dotColor="#ffa726" />
-          <ResultSection title="Советы по улучшению" items={result.suggestions} type="suggestions" dotColor="#1E47F7" />
+          <ResultSection title="Strengths" items={result.strengths} type="strengths" dotColor="#4caf50" />
+          <ResultSection title="Weaknesses" items={result.weaknesses} type="weaknesses" dotColor="#ffa726" />
+          <ResultSection title="Improvement Tips" items={result.suggestions} type="suggestions" dotColor="#1E47F7" />
 
           <button className="essay-reset-btn" onClick={handleReset}>
-            Проверить другое письмо
+            Check another letter
           </button>
         </div>
       )}

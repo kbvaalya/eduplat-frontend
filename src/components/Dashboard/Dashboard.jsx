@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import "./Dashboard.css";
-import { universitiesApi, userApi, dashboardApi } from "../../api.js";
+import { universitiesApi, userApi } from "../../api.js";
 
 const NAV_ITEMS = [
   {
     key: "dashboard",
-    label: "Главная",
+    label: "Home",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   },
   {
     key: "opportunities",
-    label: "Возможности",
+    label: "Opportunities",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -28,7 +28,7 @@ const NAV_ITEMS = [
   },
   {
     key: "essay",
-    label: "AI чат",
+    label: "AI Chat",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -38,7 +38,7 @@ const NAV_ITEMS = [
   },
   {
     key: "profile",
-    label: "Профиль",
+    label: "Profile",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -75,7 +75,6 @@ export default function Dashboard({ onNavigate }) {
     loadData();
   }, []);
 
-  // Закрывать меню при клике снаружи
   useEffect(() => {
     const handleClick = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -120,7 +119,6 @@ export default function Dashboard({ onNavigate }) {
     if (onNavigate) onNavigate(key, id);
   };
 
-  // Считаем дни до ближайшего дедлайна (если есть)
   const nearestDeadlineDays = (() => {
     if (!savedUnis.length) return null;
     const today = new Date();
@@ -143,7 +141,7 @@ export default function Dashboard({ onNavigate }) {
         <div className="dash-logo">
           <span className="dash-logo-arrow">↗</span>Eduplat
         </div>
-        <button className="dash-notif-btn" aria-label="Уведомления">
+        <button className="dash-notif-btn" aria-label="Notifications">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
             stroke="#111" strokeWidth="2">
             <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -155,12 +153,12 @@ export default function Dashboard({ onNavigate }) {
       {/* Greeting */}
       <div className="dash-greeting-row">
         <div className="dash-greeting">
-          Привет, {userName || "друг"}👋
+          Hey, {userName || "there"} 👋
         </div>
         <div className="dash-deadline">
           {nearestDeadlineDays !== null
-            ? <>До ближайшего дедлайна <strong>{nearestDeadlineDays} дней</strong></>
-            : "Добавьте университеты чтобы следить за дедлайнами"}
+            ? <>Next deadline in <strong>{nearestDeadlineDays} days</strong></>
+            : "Add universities to track deadlines"}
         </div>
       </div>
 
@@ -168,15 +166,15 @@ export default function Dashboard({ onNavigate }) {
       <div className="dash-premium-banner" onClick={() => handleNav("premium")}>
         <div className="dash-premium-text">
           <div className="dash-premium-title">
-            Хочешь добавить<br />больше университетов?<br />
-            <span style={{ fontWeight: 800 }}>Premium всего за $5.90</span>
+            Want to add more<br />universities?<br />
+            <span style={{ fontWeight: 800 }}>Premium for just $5.90</span>
           </div>
           <button className="dash-premium-link" onClick={(e) => { e.stopPropagation(); handleNav("premium"); }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
               stroke="white" strokeWidth="2.5">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
-            Подробнее
+            Learn more
           </button>
         </div>
         <div className="dash-premium-img">✨</div>
@@ -184,24 +182,24 @@ export default function Dashboard({ onNavigate }) {
 
       {/* Section header */}
       <div className="dash-section-header">
-        <span className="dash-section-title">Мои университеты</span>
+        <span className="dash-section-title">My Universities</span>
         <button className="dash-add-btn" onClick={() => handleNav("home")}>
-          Добавить +
+          Add +
         </button>
       </div>
 
       {/* Content */}
       {loading ? (
-        <div className="dash-loading">Загрузка...</div>
+        <div className="dash-loading">Loading...</div>
       ) : savedUnis.length === 0 ? (
         <div className="dash-empty">
           <div className="dash-empty-icon">🎓</div>
-          <div className="dash-empty-title">Список пуст</div>
+          <div className="dash-empty-title">List is empty</div>
           <div className="dash-empty-sub">
-            Добавьте университеты, которые вас интересуют, чтобы следить за вероятностью поступления и дедлайнами
+            Add universities you're interested in to track admission chances and deadlines
           </div>
           <button className="dash-empty-btn" onClick={() => handleNav("home")}>
-            Найти университеты
+            Find Universities
           </button>
         </div>
       ) : (
@@ -256,7 +254,7 @@ export default function Dashboard({ onNavigate }) {
                               <path d="M10 11v6M14 11v6"/>
                               <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
                             </svg>
-                            Удалить
+                            Remove
                           </button>
                         </div>
                       )}
@@ -265,7 +263,7 @@ export default function Dashboard({ onNavigate }) {
 
                   <div className="dash-card-stats">
                     <div className="dash-stat">
-                      <div className="dash-stat-label">Вероятность</div>
+                      <div className="dash-stat-label">Probability</div>
                       <div className="dash-stat-value">{uni.probability}%</div>
                     </div>
                     <div className="dash-stat">
@@ -278,7 +276,9 @@ export default function Dashboard({ onNavigate }) {
                     </div>
                   </div>
 
-                  <button className="dash-detail-btn" onClick={() => handleNav("uni-detail", uni.id)}>Узнать подробнее</button>
+                  <button className="dash-detail-btn" onClick={() => handleNav("uni-detail", uni.id)}>
+                    View Details
+                  </button>
                 </div>
               </div>
             );

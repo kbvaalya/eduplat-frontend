@@ -4,8 +4,8 @@ import { universitiesApi } from "../../api.js";
 
 const NAV_ITEMS = [
   {
-    key: "home",
-    label: "Главная",
+    key: "dashboard",
+    label: "Home",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   },
   {
     key: "opportunities",
-    label: "Возможности",
+    label: "Opportunities",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -26,7 +26,7 @@ const NAV_ITEMS = [
   },
   {
     key: "essay",
-    label: "AI чат",
+    label: "AI Chat",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -36,7 +36,7 @@ const NAV_ITEMS = [
   },
   {
     key: "profile",
-    label: "Профиль",
+    label: "Profile",
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? "#1E47F7" : "none"}
         stroke={active ? "#1E47F7" : "#888"} strokeWidth="2">
@@ -84,9 +84,9 @@ export default function Home({ onNavigate }) {
   const loadCountries = async () => {
     try {
       const data = await universitiesApi.getCountries();
-      setCountries(Array.isArray(data) ? data : ["Австралия", "Великобритания", "Канада", "США"]);
+      setCountries(Array.isArray(data) ? data : ["Australia", "UK", "Canada", "USA"]);
     } catch {
-      setCountries(["Австралия", "Великобритания", "Канада", "США"]);
+      setCountries(["Australia", "UK", "Canada", "USA"]);
     }
   };
 
@@ -121,14 +121,14 @@ export default function Home({ onNavigate }) {
       if (isSaved) {
         await universitiesApi.unsave(uni.id);
         setSavedIds(prev => prev.filter(id => id !== uni.id));
-        showToast("Убрано с доски");
+        showToast("Removed from board");
       } else {
         await universitiesApi.save(uni.id);
         setSavedIds(prev => [...prev, uni.id]);
-        showToast("Добавлено на доску ✓");
+        showToast("Added to board ✓");
       }
     } catch (err) {
-      showToast("Ошибка: " + err.message);
+      showToast("Error: " + err.message);
     }
   };
 
@@ -155,19 +155,20 @@ export default function Home({ onNavigate }) {
     <div className="home-root" onClick={() => openFilter && setOpenFilter(null)}>
       {/* Header */}
       <div className="home-header">
+        <button className="home-back-btn" onClick={() => handleNav("dashboard")}>
+          ‹ Back
+        </button>
         <div className="home-logo"><span className="home-logo-arrow">↗</span>Eduplat</div>
       </div>
 
       {/* Title */}
       <div className="home-title-row">
-        <h1 className="home-title">Добавить университет</h1>
-        <p className="home-subtitle">Ищите и добавляйте университеты в свою доску</p>
+        <h1 className="home-title">Add University</h1>
+        <p className="home-subtitle">Search and add universities to your board</p>
       </div>
 
-      {/* ── Search + Filters всегда видны ── */}
+      {/* Search + Filters */}
       <div className="home-controls">
-
-        {/* Search */}
         <div className="home-search-wrap">
           <svg className="home-search-icon" width="16" height="16" viewBox="0 0 24 24"
             fill="none" stroke="#aaa" strokeWidth="2">
@@ -176,7 +177,7 @@ export default function Home({ onNavigate }) {
           </svg>
           <input
             className="home-search"
-            placeholder="Поиск по названию..."
+            placeholder="Search by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onClick={(e) => e.stopPropagation()}
@@ -186,7 +187,6 @@ export default function Home({ onNavigate }) {
           )}
         </div>
 
-        {/* Filters row */}
         <div className="home-filters-row" onClick={(e) => e.stopPropagation()}>
 
           {/* Country */}
@@ -195,12 +195,12 @@ export default function Home({ onNavigate }) {
               className={`filter-btn ${filterCountry ? "filter-btn--active" : ""}`}
               onClick={() => setOpenFilter(openFilter === "country" ? null : "country")}
             >
-              {filterCountry || "Страна"} ▾
+              {filterCountry || "Country"} ▾
             </button>
             {openFilter === "country" && (
               <div className="filter-dropdown">
                 <div className="filter-option" onClick={() => { setFilterCountry(""); setOpenFilter(null); }}>
-                  Все страны
+                  All countries
                 </div>
                 {countries.map((c) => (
                   <div key={c} className="filter-option"
@@ -218,17 +218,17 @@ export default function Home({ onNavigate }) {
               className={`filter-btn ${filterLabel ? "filter-btn--active" : ""}`}
               onClick={() => setOpenFilter(openFilter === "label" ? null : "label")}
             >
-              {filterLabel || "Сложность"} ▾
+              {filterLabel || "Difficulty"} ▾
             </button>
             {openFilter === "label" && (
               <div className="filter-dropdown">
                 <div className="filter-option" onClick={() => { setFilterLabel(""); setOpenFilter(null); }}>
-                  Все
+                  All
                 </div>
-                {["Сложно", "Средне", "Реально"].map((d) => (
+                {["hard", "medium", "easy"].map((d) => (
                   <div key={d} className="filter-option"
                     onClick={() => { setFilterLabel(d); setOpenFilter(null); }}>
-                    {d}
+                    {d.charAt(0).toUpperCase() + d.slice(1)}
                   </div>
                 ))}
               </div>
@@ -241,18 +241,18 @@ export default function Home({ onNavigate }) {
               className={`filter-btn ${sortBy ? "filter-btn--active" : ""}`}
               onClick={() => setOpenFilter(openFilter === "sort" ? null : "sort")}
             >
-              {sortBy === "probability" ? "Вероятность" : sortBy === "min_gpa" ? "GPA" : sortBy === "min_sat" ? "SAT" : sortBy === "ranking" ? "Рейтинг" : "Сортировка"} ▾
+              {sortBy === "probability" ? "Probability" : sortBy === "min_gpa" ? "GPA" : sortBy === "min_sat" ? "SAT" : sortBy === "ranking" ? "Ranking" : "Sort"} ▾
             </button>
             {openFilter === "sort" && (
               <div className="filter-dropdown">
                 <div className="filter-option" onClick={() => { setSortBy(""); setOpenFilter(null); }}>
-                  По умолчанию
+                  Default
                 </div>
                 {[
-                  { key: "probability", label: "По вероятности" },
-                  { key: "min_gpa", label: "По GPA" },
-                  { key: "min_sat", label: "По SAT" },
-                  { key: "ranking", label: "По рейтингу" },
+                  { key: "probability", label: "By probability" },
+                  { key: "min_gpa", label: "By GPA" },
+                  { key: "min_sat", label: "By SAT" },
+                  { key: "ranking", label: "By ranking" },
                 ].map((s) => (
                   <div key={s.key} className="filter-option"
                     onClick={() => { setSortBy(s.key); setOpenFilter(null); }}>
@@ -264,7 +264,7 @@ export default function Home({ onNavigate }) {
           </div>
 
           {hasFilters && (
-            <button className="filter-btn filter-btn--clear" onClick={clearFilters}>✕ Сброс</button>
+            <button className="filter-btn filter-btn--clear" onClick={clearFilters}>✕ Reset</button>
           )}
         </div>
       </div>
@@ -272,11 +272,11 @@ export default function Home({ onNavigate }) {
       {/* University list */}
       <div className="home-list">
         {loading ? (
-          <div className="home-loading">Загрузка...</div>
+          <div className="home-loading">Loading...</div>
         ) : error ? (
           <div className="home-error">{error}</div>
         ) : universities.length === 0 ? (
-          <div className="home-empty">Университеты не найдены</div>
+          <div className="home-empty">No universities found</div>
         ) : (
           universities.map((uni) => {
             const labelStyle = getLabelStyle(uni.label);
@@ -302,7 +302,7 @@ export default function Home({ onNavigate }) {
 
                 <div className="uni-stats">
                   <div className="uni-stat">
-                    <span className="uni-stat-label">Вероятность</span>
+                    <span className="uni-stat-label">Probability</span>
                     <span className="uni-stat-value">{uni.probability}%</span>
                   </div>
                   <div className="uni-stat">
@@ -319,7 +319,7 @@ export default function Home({ onNavigate }) {
                   className={`uni-add-btn ${isSaved ? "uni-add-btn--saved" : ""}`}
                   onClick={() => toggleSave(uni)}
                 >
-                  {isSaved ? "✓ На доске" : "Добавить"}
+                  {isSaved ? "✓ On board" : "Add"}
                 </button>
               </div>
             );
@@ -333,10 +333,10 @@ export default function Home({ onNavigate }) {
         {NAV_ITEMS.map((item) => (
           <button
             key={item.key}
-            className={`bottom-nav-item ${item.key === "home" ? "bottom-nav-item--active" : ""}`}
+            className="bottom-nav-item"
             onClick={() => handleNav(item.key)}
           >
-            {item.icon(item.key === "home")}
+            {item.icon(false)}
             <span className="bottom-nav-label">{item.label}</span>
           </button>
         ))}

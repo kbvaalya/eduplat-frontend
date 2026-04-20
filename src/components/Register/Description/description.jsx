@@ -3,48 +3,56 @@ import "./description.css";
 import { userApi } from "../../../api.js";
 
 const categoryMap = {
-  "Волонтерство": "volunteering",
-  "Лидерский опыт": "leadership",
-  "Клуб": "club",
-  "Исследование": "research",
-  "Олимпиада": "olympiad",
-  "Спорт": "sports",
+  "Volunteering": "volunteering",
+  "Leadership": "leadership",
+  "Club": "club",
+  "Research": "research",
+  "Olympiad": "olympiad",
+  "Sports": "sports",
 };
 
 const steps = [
   {
-    title: "Напиши о себе",
-    subtitle: "Это поможет нам рассчитать твою вероятность поступления.",
+    title: "Tell us about yourself",
+    subtitle: "This helps us calculate your admission probability.",
     fields: [
-      { label: "Имя", type: "text", placeholder: "" },
-      { label: "Эл почта", type: "email", placeholder: "" },
-      { label: "Место обучения", type: "text", placeholder: "" },
-      { label: "Класс", type: "text", placeholder: "" },
+      { label: "Name", type: "text", placeholder: "" },
+      { label: "Email", type: "email", placeholder: "" },
+      { label: "School", type: "text", placeholder: "" },
+      { label: "Grade", type: "text", placeholder: "" },
     ],
   },
   {
-    title: "Академическая информация",
-    subtitle: "Введите данные об успеваемости.",
+    title: "Academic Information",
+    subtitle: "Enter your academic performance data.",
     fields: [
-      { label: "GPA", type: "number", placeholder: "0.00-4.00" },
-      { label: "Результат SAT", type: "number", placeholder: "400-1600" },
-      { label: "Результат IELTS", type: "number", placeholder: "1.0-9.0" },
-      { label: "Результат TOEFL", type: "number", placeholder: "0-120" },
+      { label: "GPA", type: "number", placeholder: "0.00–4.00" },
+      { label: "SAT Score", type: "number", placeholder: "400–1600" },
+      { label: "IELTS Score", type: "number", placeholder: "1.0–9.0" },
+      { label: "TOEFL Score", type: "number", placeholder: "0–120" },
     ],
   },
   {
-    title: "Внеучебная информация",
-    subtitle: "Введите данные о своих активностях",
+    title: "Extracurricular Activities",
+    subtitle: "Tell us about your activities",
     fields: [
       {
-        label: "Категория (можно выбрать несколько)",
+        label: "Category (you can select multiple)",
         type: "multicheck",
-        options: ["Волонтерство", "Лидерский опыт", "Клуб", "Исследование", "Олимпиада", "Спорт"],
+        options: ["Volunteering", "Leadership", "Club", "Research", "Olympiad", "Sports"],
       },
-      { label: "Годы деятельности", type: "text", placeholder: "Например: 2020-2025" },
+      { label: "Years Active", type: "text", placeholder: "e.g. 2020–2025" },
     ],
   },
 ];
+
+// Map English labels to API keys
+const fieldApiKeys = {
+  "Name": "name",
+  "Email": "email",
+  "School": "school",
+  "Grade": "grade",
+};
 
 export default function Description({ onNavigate }) {
   const [current, setCurrent] = useState(0);
@@ -70,29 +78,29 @@ export default function Description({ onNavigate }) {
     setServerError("");
     try {
       await userApi.updateAbout({
-        name: values["Имя"],
-        email: values["Эл почта"],
-        school: values["Место обучения"],
-        grade: values["Класс"],
+        name: values["Name"],
+        email: values["Email"],
+        school: values["School"],
+        grade: values["Grade"],
       });
 
       await userApi.updateAcademic({
         gpa: parseFloat(values["GPA"]) || null,
-        sat: parseInt(values["Результат SAT"]) || null,
-        ielts: parseFloat(values["Результат IELTS"]) || null,
-        toefl: parseInt(values["Результат TOEFL"]) || null,
+        sat: parseInt(values["SAT Score"]) || null,
+        ielts: parseFloat(values["IELTS Score"]) || null,
+        toefl: parseInt(values["TOEFL Score"]) || null,
       });
 
-      const selectedCategories = (values["Категория (можно выбрать несколько)"] || [])
+      const selectedCategories = (values["Category (you can select multiple)"] || [])
         .map((c) => categoryMap[c])
         .filter(Boolean);
 
       await userApi.updateExtracurriculars({
         categories: selectedCategories,
-        years_active: values["Годы деятельности"] || "",
+        years_active: values["Years Active"] || "",
       });
 
-      onNavigate("dashboard"); // ← главная страница
+      onNavigate("dashboard");
     } catch (err) {
       setServerError(err.message);
       setLoading(false);
@@ -121,12 +129,12 @@ export default function Description({ onNavigate }) {
         {isDone ? (
           <div className="success">
             <div className="success-icon">✓</div>
-            <div className="success-title">Профиль заполнен!</div>
+            <div className="success-title">Profile Complete!</div>
             <div className="success-sub">
-              Теперь мы рассчитаем твою вероятность поступления
+              We'll now calculate your admission probability
             </div>
             <button className="btn" onClick={() => onNavigate("dashboard")}>
-              Начать
+              Get Started
             </button>
           </div>
         ) : (
@@ -196,7 +204,7 @@ export default function Description({ onNavigate }) {
                     />
                   )}
 
-                  {isEmpty && <div className="field-error">Заполните это поле</div>}
+                  {isEmpty && <div className="field-error">Please fill in this field</div>}
                 </div>
               );
             })}
@@ -206,11 +214,11 @@ export default function Description({ onNavigate }) {
               onClick={handleNext}
               disabled={loading}
             >
-              {loading ? "Сохранение..." : current === steps.length - 1 ? "Завершить" : "Продолжить"}
+              {loading ? "Saving..." : current === steps.length - 1 ? "Finish" : "Continue"}
             </button>
 
             <div className="note">
-              Не беспокойтесь! Вы можете поменять свою информацию позже в настройках профиля
+              Don't worry! You can update your information later in your profile settings.
             </div>
           </>
         )}

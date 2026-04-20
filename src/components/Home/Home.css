@@ -23,10 +23,32 @@
   top: 0;
   z-index: 50;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .home-logo { font-size: 18px; font-weight: 700; color: #111; }
 .home-logo-arrow { color: #1E47F7; }
+
+.home-back-btn {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.home-back-btn:hover { color: #1E47F7; }
 
 .home-title-row {
   background: white;
@@ -37,7 +59,7 @@
 .home-title { font-size: 22px; font-weight: 700; color: #111; }
 .home-subtitle { font-size: 13px; color: #888; margin-top: 4px; }
 
-/* ── Controls (search + filters always together) ── */
+/* ── Controls ── */
 .home-controls {
   background: white;
   border-bottom: 1px solid #f0f0f0;

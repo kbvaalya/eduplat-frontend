@@ -4,28 +4,28 @@ import "./Premium.css";
 const FEATURES = [
   {
     icon: "🎓",
-    title: "Неограниченные университеты",
-    sub: "Добавляй и отслеживай без лимита",
+    title: "Unlimited Universities",
+    sub: "Add and track without any limit",
   },
   {
     icon: "🔍",
-    title: "Расширенный анализ",
-    sub: "Глубокая оценка профиля и шансов",
+    title: "Advanced Analysis",
+    sub: "Deep evaluation of your profile and chances",
   },
   {
     icon: "🤖",
-    title: "AI рекомендации",
-    sub: "Персональные советы на основе твоих данных",
+    title: "AI Recommendations",
+    sub: "Personalized advice based on your data",
   },
   {
     icon: "📄",
-    title: "20 AI проверок эссе",
-    sub: "Проверка и улучшение эссе при помощи ИИ",
+    title: "20 AI Essay Checks",
+    sub: "Essay review and improvement powered by AI",
   },
   {
     icon: "🚀",
-    title: "Полный доступ к возможностям",
-    sub: "Все функции без ограничений с персональными уведомлениями",
+    title: "Full Access to Opportunities",
+    sub: "All features without limits with personal notifications",
   },
 ];
 
@@ -38,14 +38,14 @@ export default function Premium({ onNavigate }) {
       {/* Back */}
       <div className="prem-back">
         <button className="prem-back-btn" onClick={() => onNavigate("back")}>
-          ‹ Назад
+          ‹ Back
         </button>
       </div>
 
       {/* Hero */}
       <div className="prem-hero">
         <div className="prem-glow">✨</div>
-        <h1 className="prem-title">Переходи на Premium</h1>
+        <h1 className="prem-title">Upgrade to Premium</h1>
       </div>
 
       {/* Features */}
@@ -68,10 +68,10 @@ export default function Premium({ onNavigate }) {
           className={`prem-plan ${selectedPlan === "annual" ? "prem-plan--active" : ""}`}
           onClick={() => setSelectedPlan("annual")}
         >
-          <div className="prem-plan-badge">Экономия в 45%</div>
-          <div className="prem-plan-period">Годовой</div>
+          <div className="prem-plan-badge">Save 45%</div>
+          <div className="prem-plan-period">Annual</div>
           <div className="prem-plan-price">$39.90</div>
-          <div className="prem-plan-desc">Популярно у пользователей из-за большой выгоды</div>
+          <div className="prem-plan-desc">Popular among users for great value</div>
         </button>
 
         {/* Monthly */}
@@ -79,16 +79,16 @@ export default function Premium({ onNavigate }) {
           className={`prem-plan ${selectedPlan === "monthly" ? "prem-plan--active" : ""}`}
           onClick={() => setSelectedPlan("monthly")}
         >
-          <div className="prem-plan-period">Месячный</div>
+          <div className="prem-plan-period">Monthly</div>
           <div className="prem-plan-price">$5.90</div>
-          <div className="prem-plan-desc">Идеально для пользователей с краткосрочной подготовкой</div>
+          <div className="prem-plan-desc">Perfect for short-term preparation</div>
         </button>
       </div>
 
       {/* CTA */}
       <div className="prem-cta">
         <button className="prem-cta-btn">
-          Получить Premium
+          Get Premium
         </button>
       </div>
 

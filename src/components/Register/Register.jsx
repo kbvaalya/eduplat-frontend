@@ -21,11 +21,11 @@ function Register({ onNavigate }) {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.email.trim()) newErrors.email = "Введите email";
-    if (!formData.password.trim()) newErrors.password = "Введите пароль";
-    else if (formData.password.length < 8) newErrors.password = "Минимум 8 символов";
-    if (!formData.rpassword.trim()) newErrors.rpassword = "Повторите пароль";
-    else if (formData.password !== formData.rpassword) newErrors.rpassword = "Пароли не совпадают";
+    if (!formData.email.trim()) newErrors.email = "Enter your email";
+    if (!formData.password.trim()) newErrors.password = "Enter your password";
+    else if (formData.password.length < 8) newErrors.password = "Minimum 8 characters";
+    if (!formData.rpassword.trim()) newErrors.rpassword = "Repeat your password";
+    else if (formData.password !== formData.rpassword) newErrors.rpassword = "Passwords do not match";
     return newErrors;
   };
 
@@ -40,7 +40,7 @@ function Register({ onNavigate }) {
     try {
       const data = await authApi.register(formData.email, formData.password, formData.rpassword);
       localStorage.setItem("token", data.access_token);
-      onNavigate("description"); // ← стало
+      onNavigate("description");
     } catch (err) {
       setErrors({ server: err.message });
     } finally {
@@ -53,10 +53,10 @@ function Register({ onNavigate }) {
       <div className='bigC'>
         <img src={back} alt='' className='img1' />
       </div>
-      <button className='back-btn1' onClick={() => onNavigate("back")}>‹ Назад</button>
+      <button className='back-btn1' onClick={() => onNavigate("back")}>‹ Back</button>
       <div className='containerRegister'>
         <div className='text1'>
-          <h1>Создайте свой аккаунт</h1>
+          <h1>Create your account</h1>
         </div>
 
         {errors.server && (
@@ -73,7 +73,7 @@ function Register({ onNavigate }) {
           </label>
 
           <label className='label'>
-            Пароль
+            Password
             <div style={{ position: "relative" }}>
               <input
                 type={showPassword ? "text" : "password"}
@@ -100,7 +100,7 @@ function Register({ onNavigate }) {
           </label>
 
           <label className='label'>
-            Повторите пароль
+            Confirm Password
             <div style={{ position: "relative" }}>
               <input
                 type={showConfirmPassword ? "text" : "password"}
@@ -129,7 +129,7 @@ function Register({ onNavigate }) {
 
         <div>
           <button className='button' onClick={handleSubmit} disabled={loading}>
-            {loading ? "Загрузка..." : "Создать"}
+            {loading ? "Loading..." : "Create Account"}
           </button>
         </div>
       </div>
